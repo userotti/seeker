@@ -8,10 +8,10 @@ import luxe.Visual;
 class TowerCooldownComponent extends Component {
 
   public var ready : Bool;
-
+  public var max_cooldown : Float;
+  public var cooldown : Float;
+  
   private var TAG = 'TowerCooldownComponent';
-  private var max_cooldown : Float;
-  private var cooldown : Float;
   private var cooldown_recharge : Float;
   private var tower : Visual;
 

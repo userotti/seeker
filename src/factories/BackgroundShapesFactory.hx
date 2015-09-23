@@ -29,7 +29,7 @@ class BackgroundShapesFactory {
         //the add it to the renderer
     Luxe.renderer.add_batch(background_batcher);
 
-    var FPS_couter = new FPS(background_batcher);
+    
 
   } //init
 

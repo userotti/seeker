@@ -59,8 +59,18 @@ class Main extends luxe.Game {
 
     this.player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
 
-    var move_stat_component = hud_factoy.createMovementStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x556677));
+    var cooldown_stat_component = hud_factoy.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632));
+    cooldown_stat_component.get('cooldown_statbar_component').setTower(player_name);
+
+    var fuel_stat_component = hud_factoy.createFuelStatBar(new Vector(Luxe.screen.w-10-20-20, Luxe.screen.h-20), new Color().rgb(0x673677));
+    fuel_stat_component.get('fuel_statbar_component').setTower(player_name);
+
+    var move_stat_component = hud_factoy.createMovementStatBar(new Vector(Luxe.screen.w-10-20-80, Luxe.screen.h-20), new Color().rgb(0x556677));
     move_stat_component.get('movement_statbar_component').setTower(player_name);
+
+    var break_stat_component = hud_factoy.createBreakStatBar(new Vector(Luxe.screen.w-10-20-80-90, Luxe.screen.h-20), new Color().rgb(0x44aa55), new Color().rgb(0x882233));
+    break_stat_component.get('break_statbar_component').setTower(player_name);
+
 
   }
 

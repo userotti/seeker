@@ -5,6 +5,9 @@ import luxe.Visual;
 import luxe.Color;
 import luxe.Scene;
 import components.hud.MovementStatBarComponent;
+import components.hud.CooldownStatBarComponent;
+import components.hud.FuelStatBarComponent;
+import components.hud.BreakStatBarComponent;
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
@@ -27,6 +30,8 @@ class HudFactory {
     hud_batcher.view = hud_view;
     hud_batcher.layer = 2;
     Luxe.renderer.add_batch(hud_batcher);
+
+    var FPS_couter = new FPS(hud_batcher);
 
   } //init
 
@@ -53,4 +58,32 @@ class HudFactory {
     bar.add(component);
     return bar;
   }
+
+  public function createCooldownStatBar (pos:Vector, color:Color){
+    var bar = createStatBar(pos, color, 'cooldown_statbar');
+    var component = new CooldownStatBarComponent({
+      name: 'cooldown_statbar_component'
+    });
+    bar.add(component);
+    return bar;
+  }
+
+  public function createFuelStatBar (pos:Vector, color:Color){
+    var bar = createStatBar(pos, color, 'fuel_statbar');
+    var component = new FuelStatBarComponent({
+      name: 'fuel_statbar_component'
+    });
+    bar.add(component);
+    return bar;
+  }
+
+  public function createBreakStatBar (pos:Vector, on_color:Color, off_color:Color){
+    var bar = createStatBar(pos, on_color, 'break_statbar');
+    var component = new BreakStatBarComponent({
+      name: 'break_statbar_component'
+    }, on_color, off_color);
+    bar.add(component);
+    return bar;
+  }
+
 }

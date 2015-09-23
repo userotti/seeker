@@ -6,41 +6,33 @@ import luxe.Sprite;
 import luxe.Visual;
 
 import components.tower.TowerBoostComponent;
-import components.tower.TowerMovementComponent;
 
+class FuelStatBarComponent extends Component {
 
-
-class MovementStatBarComponent extends Component {
-
-  private var TAG = 'MovementStatBarComponent';
+  private static var TAG = 'FuelStatBarComponent';
   private var full : Float;
   private var tower : Visual;
   private var statbar : Sprite;
 
   private var boost_component : TowerBoostComponent;
-  private var movement_component : TowerMovementComponent;
-
 
   public function new(json:Dynamic) {
     super(json);
-    full = 180;
+    full = -100;
   }
 
   override function init() {
     statbar = cast entity;
-    statbar.size.x = -5;
-    statbar.size.y = 50;
-
+    statbar.size.x = 10;
+    statbar.size.y = full;
 
   } //init
 
   override function update(dt:Float) {
-    statbar.rotation_z = 90 + (movement_component.velocity.length / boost_component.top_speed) * full;
+    statbar.size.y = (boost_component.fuel / boost_component.max_fuel) * full;
   } //update
 
   public function setTower(entityName:String){
     boost_component = cast Luxe.scene.entities.get(entityName).get('boost');
-    movement_component = cast Luxe.scene.entities.get(entityName).get('movement');
-
   }
 }

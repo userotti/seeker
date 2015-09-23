@@ -18,6 +18,8 @@ class TowerBoostComponent extends Component {
   public var max_fuel : Float;
   public var fuel : Float;
 
+  public var top_speed: Float;
+
   public var fuel_recharge : Float;
 
   private var cooldown : TowerCooldownComponent;
@@ -39,8 +41,15 @@ class TowerBoostComponent extends Component {
   override function update(dt:Float) {
     if (boosting == true){
       acceleration = Vector.Subtract(destination,tower.pos).normalized.multiplyScalar(boost_power);
+
       movement.velocity.x += (acceleration.x * dt);
       movement.velocity.y += (acceleration.y * dt);
+
+      if (movement.velocity.length >= top_speed){
+        movement.velocity = movement.velocity.normalized.multiplyScalar(top_speed);
+      }
+
+
 
       if (fuel > boost_power){
         fuel -= boost_power;
@@ -63,12 +72,13 @@ class TowerBoostComponent extends Component {
 
   } //update
 
-  public function setup(boostPower:Float, maxFuel: Float, fuelRecharge:Float) {
+  public function setup(boostPower:Float, topSpeed: Float, maxFuel: Float, fuelRecharge:Float) {
     trace('setup');
     boost_power = boostPower;
     max_fuel = maxFuel;
     fuel = max_fuel;
     fuel_recharge = fuelRecharge;
+    top_speed = topSpeed;
   } //init
 
   public function boostOn(dest:Vector, closeEnough:Float){
