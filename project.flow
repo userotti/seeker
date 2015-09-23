@@ -1,0 +1,36 @@
+{
+
+  luxe:{
+    window: {
+      width:1280,
+      height:960,
+      title:'Seeker',
+      fullscreen:false,
+      resizable:true,
+      borderless:false
+    }
+  },
+
+  project : {
+    name : 'seeker',
+    version : '1.0.0',
+    author : 'userotti',
+
+    app : {
+      name : 'seeker',
+      package : 'com.seeker.empty'
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+      }
+    },
+
+    files : {
+      assets : 'assets/'
+    }
+
+  }
+
+}
