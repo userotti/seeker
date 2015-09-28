@@ -1,4 +1,4 @@
-package factories;
+package factories.gamestate;
 
 import luxe.Vector;
 import luxe.Visual;
@@ -6,6 +6,13 @@ import luxe.Color;
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
+
+/*import phoenix.Texture;
+import phoenix.Batcher;
+import phoenix.geometry.Geometry;
+import phoenix.Rectangle;
+import phoenix.geometry.Vertex;
+import phoenix.Camera;*/
 
 import components.tower.TowerMovementComponent;
 import components.tower.TowerFrictionComponent;
@@ -72,7 +79,7 @@ class TowerFactory {
     break_comp.setup(4);
 
     //boostpower, top_speed, max_fuel, fuel_recharge
-    boost_comp.setup(350, 300, 40000, 200);
+    boost_comp.setup(360, 270, 30000, 200);
 
     tower.geometry = this.makeBasicGeometry();
     tower.geometry.color = new Color().rgb(0xff4400);

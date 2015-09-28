@@ -1,4 +1,4 @@
-package factories;
+package factories.gamestate;
 
 import luxe.Vector;
 import luxe.Visual;
@@ -29,7 +29,7 @@ class BackgroundShapesFactory {
         //the add it to the renderer
     Luxe.renderer.add_batch(background_batcher);
 
-    
+
 
   } //init
 

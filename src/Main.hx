@@ -16,67 +16,26 @@ import luxe.structural.Pool;
 import luxe.structural.Bag;
 import luxe.options.GeometryOptions;
 
-import phoenix.Texture;
-import phoenix.Batcher;
-import phoenix.geometry.Geometry;
-import phoenix.Rectangle;
-import phoenix.geometry.Vertex;
-import phoenix.Camera;
-
-import factories.BackgroundShapesFactory;
-import factories.TowerFactory;
-import factories.HudFactory;
-
+import states.*;
 import FPS;
 
 
 class Main extends luxe.Game {
 
-  var mouse : Vector;
-  var zoomfactor : Vector;
-  var player : Visual;
-  var background_factory : BackgroundShapesFactory;
-  var tower_factory : TowerFactory;
-  var hud_factoy : HudFactory;
-  var player_name : String;
-  override function config(config:luxe.AppConfig) {
+  private var states : luxe.States;
 
+  override function config(config:luxe.AppConfig) {
+    config.render.antialiasing = 0;
     return config;
   } //config 
 
   override function ready() {
+    states = new luxe.States({ name:'states' });
+    states.add( new states.GameState({ name:'gamestate' }) );
+    states.add( new states.MenuState({ name:'menustate' }) );
 
-    player_name = 'player';
-
-    zoomfactor = new Vector(0,0);
-    tower_factory = new TowerFactory();
-    background_factory = new BackgroundShapesFactory();
-    hud_factoy = new HudFactory();
-
-    background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
-    background_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x223356));
-
-
-    this.player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
-
-    var cooldown_stat_component = hud_factoy.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632));
-    cooldown_stat_component.get('cooldown_statbar_component').setTower(player_name);
-
-    var fuel_stat_component = hud_factoy.createFuelStatBar(new Vector(Luxe.screen.w-10-20-20, Luxe.screen.h-20), new Color().rgb(0x673677));
-    fuel_stat_component.get('fuel_statbar_component').setTower(player_name);
-
-    var move_stat_component = hud_factoy.createMovementStatBar(new Vector(Luxe.screen.w-10-20-80, Luxe.screen.h-20), new Color().rgb(0x556677));
-    move_stat_component.get('movement_statbar_component').setTower(player_name);
-
-    var break_stat_component = hud_factoy.createBreakStatBar(new Vector(Luxe.screen.w-10-20-80-90, Luxe.screen.h-20), new Color().rgb(0x44aa55), new Color().rgb(0x882233));
-    break_stat_component.get('break_statbar_component').setTower(player_name);
-
-
+    states.set( 'gamestate' );
   }
-
-  override function onmousedown( event:MouseEvent ) {
-    this.player.get('boost').boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
-  } //onmousemove
 
   //ESCAPE QUIT
   override function onkeyup( e:KeyEvent ) {
@@ -86,13 +45,8 @@ class Main extends luxe.Game {
   }
 
 
-  override function update( delta:Float ) {
-    Luxe.camera.center.x = this.player.pos.x;
-    Luxe.camera.center.y = this.player.pos.y;
-    zoomfactor.x = this.player.get('movement').velocity.x;
-    zoomfactor.y = this.player.get('movement').velocity.y;
+  override function update( dt:Float ) {
 
-    Luxe.camera.zoom = 1 - (zoomfactor.lengthsq * 0.00000025);
   }
 
 }//Main
