@@ -35,7 +35,7 @@ class MovementStatBarComponent extends Component {
   } //init
 
   override function update(dt:Float) {
-    statbar.rotation_z = 90 + (movement_component.velocity.length / boost_component.top_speed) * full;
+    statbar.rotation_z = 90 + (movement_component.velocity.length / 1000) * full;
   } //update
 
   public function setTower(entityName:String){

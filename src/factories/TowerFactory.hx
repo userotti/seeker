@@ -69,10 +69,10 @@ class TowerFactory {
     cooldown_comp.setup(0.8);
 
     fric_comp.setup(2);
-    break_comp.setup(6);
+    break_comp.setup(4);
 
     //boostpower, top_speed, max_fuel, fuel_recharge
-    boost_comp.setup(1500, 600, 90000, 300);
+    boost_comp.setup(350, 300, 40000, 200);
 
     tower.geometry = this.makeBasicGeometry();
     tower.geometry.color = new Color().rgb(0xff4400);
