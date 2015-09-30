@@ -25,6 +25,8 @@ class Main extends luxe.Game {
   private var states : luxe.States;
 
   override function config(config:luxe.AppConfig) {
+    config.preload.textures.push({ id:'assets/images/rasters/mainmenu/title800x205.png' });
+    config.preload.fonts.push({ id:'assets/fonts/basicfont/font.fnt' });
     config.render.antialiasing = 0;
     return config;
   } //config 
@@ -32,9 +34,9 @@ class Main extends luxe.Game {
   override function ready() {
     states = new luxe.States({ name:'states' });
     states.add( new states.GameState({ name:'gamestate' }) );
-    states.add( new states.MenuState({ name:'menustate' }) );
+    states.add( new states.MainMenuState({ name:'mainmenustate' }) );
 
-    states.set( 'gamestate' );
+    states.set( 'mainmenustate' );
   }
 
   //ESCAPE QUIT

@@ -11,7 +11,7 @@ import luxe.collision.Collision;
 import luxe.collision.shapes.*;
 import luxe.collision.data.*;
 
-import factories.gamestate.*;
+import factories.game.*;
 
 class GameState extends luxe.States.State {
 

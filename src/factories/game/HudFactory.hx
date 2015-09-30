@@ -1,4 +1,4 @@
-package factories.gamestate;
+package factories.game;
 
 import luxe.Vector;
 import luxe.Visual;
