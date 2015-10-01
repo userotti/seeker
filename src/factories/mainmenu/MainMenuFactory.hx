@@ -38,6 +38,8 @@ class MainMenuFactory {
       visible: true,
       scale: new Vector(1,1),
     });
+
+    return title_sprite;
   }
 
   public function createBackdrop (color:Color){
@@ -64,5 +66,8 @@ class MainMenuFactory {
 
     shape.geometry = basic_geo;
     shape.geometry.color = color;
+
+    return shape;
+
   }
 }
