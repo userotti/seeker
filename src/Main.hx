@@ -30,6 +30,7 @@ class Main extends luxe.Game {
 
   public static var states : luxe.States;
 
+  public static var main_font;
   //Mint vibes
   public static var disp : Text;
   public static var canvas: mint.Canvas;
@@ -53,6 +54,7 @@ class Main extends luxe.Game {
     rendering = new LuxeMintRender();
     layout = new Margins();
 
+    main_font = Luxe.resources.font('assets/fonts/basicfont/font.fnt');
     canvas = new mint.Canvas({
         name:'canvas',
         rendering: rendering,
@@ -60,15 +62,15 @@ class Main extends luxe.Game {
         x: 0, y:0, w: Luxe.screen.w, h: Luxe.screen.h
     });
 
-    canvas_debug = new Text({
-        name:'debug.text',
-        text: 'debug:  (${Luxe.snow.os} / ${Luxe.snow.platform})',
-        point_size: 14,
-        pos: new Vector(950, 10),
-        align: right,
-        depth: 999,
-        color: new Color()
-    });
+    // canvas_debug = new Text({
+    //     name:'debug.text',
+    //     text: 'debug:  (${Luxe.snow.os} / ${Luxe.snow.platform})',
+    //     point_size: 14,
+    //     pos: new Vector(950, 10),
+    //     align: right,
+    //     depth: 999,
+    //     color: new Color()
+    // });
 
     states = new luxe.States({ name:'states' });
     states.add( new states.GameState({ name:'gamestate' }) );
@@ -78,22 +80,20 @@ class Main extends luxe.Game {
   }
 
   override function onmousemove(e) {
-
       canvas.mousemove( Convert.mouse_event(e) );
 
-      var s = 'debug:  (${Luxe.snow.os} / ${Luxe.snow.platform})\n';
 
-      s += 'canvas nodes: ' + (canvas != null ? '${canvas.nodes}' : 'none');
-      s += '\n';
-      s += 'focused: ' + (canvas.focused != null ? '${canvas.focused.name} [${canvas.focused.nodes}]' : 'none');
-      s += (canvas.focused != null ? ' / depth: '+canvas.focused.depth : '');
-      s += '\n';
-      s += 'modal: ' + (canvas.modal != null ?  canvas.modal.name : 'none');
-      s += '\n';
-      s += 'dragged: ' + (canvas.dragged != null ? canvas.dragged.name : 'none');
-      s += '\n\n';
-
-      canvas_debug.text = s;
+      // var s = 'debug:  (${Luxe.snow.os} / ${Luxe.snow.platform})\n';
+      // s += 'canvas nodes: ' + (canvas != null ? '${canvas.nodes}' : 'none');
+      // s += '\n';
+      // s += 'focused: ' + (canvas.focused != null ? '${canvas.focused.name} [${canvas.focused.nodes}]' : 'none');
+      // s += (canvas.focused != null ? ' / depth: '+canvas.focused.depth : '');
+      // s += '\n';
+      // s += 'modal: ' + (canvas.modal != null ?  canvas.modal.name : 'none');
+      // s += '\n';
+      // s += 'dragged: ' + (canvas.dragged != null ? canvas.dragged.name : 'none');
+      // s += '\n\n';
+      // canvas_debug.text = s;
 
   } //onmousemove
 
@@ -127,7 +127,8 @@ class Main extends luxe.Game {
     }
 
     if(e.keycode == Key.escape) {
-      Luxe.shutdown();
+      states.set( 'mainmenustate' );
+      //Luxe.shutdown();
     }
   }
 

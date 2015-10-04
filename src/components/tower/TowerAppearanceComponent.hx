@@ -17,7 +17,7 @@ class TowerAppearanceComponent extends Component {
   } //init
 
   override function update(dt:Float) {
-    tower.rotation_z = (Math.atan2(booster.acceleration.y, booster.acceleration.x) / Math.PI) * 180;
+    tower.rotation_z = (Math.atan2(booster.boost_vector.y, booster.boost_vector.x) / Math.PI) * 180;
   } //update
 
   public function setup() {

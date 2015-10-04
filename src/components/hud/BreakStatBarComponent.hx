@@ -3,10 +3,10 @@ package components.hud;
 import luxe.Component;
 import luxe.Vector;
 import luxe.Color;
-
-
 import luxe.Sprite;
 import luxe.Visual;
+import luxe.Entity;
+
 
 import components.tower.TowerBreakComponent;
 
@@ -15,12 +15,8 @@ class BreakStatBarComponent extends Component {
   private static var TAG = 'BreakStatBarComponent';
   private var on_color : Color;
   private var off_color : Color;
-
-
-
   private var tower : Visual;
   private var statbar : Sprite;
-
   private var break_component : TowerBreakComponent;
 
   public function new(json:Dynamic, onColor:Color, offColor:Color) {
@@ -44,7 +40,7 @@ class BreakStatBarComponent extends Component {
 
   } //update
 
-  public function setTower(entityName:String){
-    break_component = cast Luxe.scene.entities.get(entityName).get('break');
+  public function setTower(_tower:Entity){
+    break_component = _tower.get('break');
   }
 }

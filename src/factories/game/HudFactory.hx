@@ -4,6 +4,9 @@ import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
 import luxe.Scene;
+import luxe.Entity;
+
+
 import components.hud.MovementStatBarComponent;
 import components.hud.CooldownStatBarComponent;
 import components.hud.FuelStatBarComponent;
@@ -20,11 +23,12 @@ class HudFactory {
 
   private var hud_batcher : Batcher;
   private var hud_view : Camera;
+  private var scene : Scene;
 
 
-  public function new() {
+  public function new(_scene :Scene) {
 
-
+    scene = _scene;
     hud_batcher = new Batcher(Luxe.renderer, 'hud_batcher');
     var hud_view = new Camera();
     hud_batcher.view = hud_view;
@@ -36,7 +40,7 @@ class HudFactory {
   } //init
 
   public function createStatBar (pos:Vector, color:Color, name:String){
-    var bar = new luxe.Sprite({
+    return new luxe.Sprite({
       name: name,
       pos: pos,
       visible: true,
@@ -44,46 +48,41 @@ class HudFactory {
       centered: false,
       color: color,
       size: new Vector(1,1),
-      batcher: hud_batcher
+      batcher: hud_batcher,
+      scene: scene
     });
-
-    return bar;
   }
 
   public function createMovementStatBar (pos:Vector, color:Color){
-    var bar = createStatBar(pos, color, 'movement_statbar');
-    var component = new MovementStatBarComponent({
+    return createStatBar(pos, color, 'movement_statbar').add(new MovementStatBarComponent({
       name: 'movement_statbar_component'
-    });
-    bar.add(component);
-    return bar;
+    }));
   }
 
   public function createCooldownStatBar (pos:Vector, color:Color){
-    var bar = createStatBar(pos, color, 'cooldown_statbar');
-    var component = new CooldownStatBarComponent({
+    return createStatBar(pos, color, 'cooldown_statbar').add(new CooldownStatBarComponent({
       name: 'cooldown_statbar_component'
-    });
-    bar.add(component);
-    return bar;
+    }));
   }
 
   public function createFuelStatBar (pos:Vector, color:Color){
-    var bar = createStatBar(pos, color, 'fuel_statbar');
-    var component = new FuelStatBarComponent({
+    return createStatBar(pos, color, 'fuel_statbar').add(new FuelStatBarComponent({
       name: 'fuel_statbar_component'
-    });
-    bar.add(component);
-    return bar;
+    }));
   }
 
   public function createBreakStatBar (pos:Vector, on_color:Color, off_color:Color){
-    var bar = createStatBar(pos, on_color, 'break_statbar');
-    var component = new BreakStatBarComponent({
+    return createStatBar(pos, on_color, 'break_statbar').add(new BreakStatBarComponent({
       name: 'break_statbar_component'
-    }, on_color, off_color);
-    bar.add(component);
-    return bar;
+    }, on_color, off_color));
+  }
+
+  //This does not get called on seen change, the objects only ever gets built once. Main.hx onReady()
+  public function destory() {
+    hud_batcher.destroy();
+    hud_view = null;
+    Luxe.renderer.remove_batch(hud_batcher);
+
   }
 
 }

@@ -5,6 +5,9 @@ import luxe.Visual;
 import luxe.Color;
 import luxe.Scene;
 import luxe.Sprite;
+import luxe.Text;
+
+
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
@@ -18,9 +21,13 @@ class MainMenuFactory {
   private var title_sprite : Sprite;
   private var menu_batcher : Batcher;
   private var menu_view : Camera;
+  private var scene : Scene;
 
-  public function new() {
 
+
+  public function new(_scene:Scene) {
+
+    scene = _scene;
     menu_batcher = new Batcher(Luxe.renderer, 'menu_batcher');
     var menu_view = new Camera();
     menu_batcher.view = menu_view;
@@ -31,15 +38,59 @@ class MainMenuFactory {
 
   public function createTitleSprite () {
     title_sprite = new Sprite({
-      name:'ballon',
+      name:'title',
       texture : Luxe.resources.texture('assets/images/rasters/mainmenu/title800x205.png'),
       pos : new Vector(Luxe.screen.mid.x,180),
       centered : true,
       visible: true,
       scale: new Vector(1,1),
+      scene: scene,
+      batcher: menu_batcher
     });
 
     return title_sprite;
+  }
+
+  public function createButton (label:String, size:Float, x:Float, y:Float, w:Float, h:Float){
+
+    var new_game_sprite = new Text({
+      text: label,
+      pos : new Vector(x, y),
+      size : new Vector(w, h),
+      point_size : size,
+      align: center,
+      color: new Color().rgb(0x425376),
+      font: Main.main_font,
+      scene: scene,
+      batcher: menu_batcher
+    });
+
+    var new_game_button = new mint.Button({
+      parent: Main.canvas,
+      text: '',
+      x:new_game_sprite.pos.x-(w/2), y:new_game_sprite.pos.y, w:new_game_sprite.size.x, h:new_game_sprite.size.y,
+      visible: true,
+      options: {
+        color: new Color().set(0,0,0,0),
+        color_hover: new Color().set(0,0,0,0),
+        color_down: new Color().set(0,0,0,0),
+      },
+      onclick: function(e,c){
+
+      }
+    });
+
+
+    new_game_button.onmouseenter.listen(function(e,c){
+      new_game_sprite.color = new Color().rgb(0x627396);
+    });
+
+    new_game_button.onmouseleave.listen(function(e,c){
+      new_game_sprite.color = new Color().rgb(0x425376);
+    });
+
+
+    return new_game_button;
   }
 
   public function createBackdrop (color:Color){
@@ -47,6 +98,7 @@ class MainMenuFactory {
       pos: new Vector(0,0),
       visible: true,
       scale: new Vector(1,1),
+      scene: scene
     });
 
     var basic_geo = new phoenix.geometry.Geometry({

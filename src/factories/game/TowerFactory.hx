@@ -3,29 +3,29 @@ package factories.game;
 import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
+import luxe.Scene;
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
-
-/*import phoenix.Texture;
-import phoenix.Batcher;
-import phoenix.geometry.Geometry;
-import phoenix.Rectangle;
-import phoenix.geometry.Vertex;
-import phoenix.Camera;*/
 
 import components.tower.TowerMovementComponent;
+import components.tower.TowerAccelerationComponent;
+
 import components.tower.TowerFrictionComponent;
 import components.tower.TowerBoostComponent;
 import components.tower.TowerBreakComponent;
 import components.tower.TowerCooldownComponent;
 
+
 import components.tower.TowerAppearanceComponent;
 
+//This class creates new Sprites and Entities and their components and adds them the scene they got from the state they're a member of.
 class TowerFactory {
 
-  public function new() {
+  private var scene : Scene;
 
+  public function new(_scene:Scene) {
+    scene = _scene;
   }
 
   public function createTower (pos:Vector, name:String) : Visual{
@@ -34,6 +34,7 @@ class TowerFactory {
       pos: new Vector(pos.x,pos.y),
       visible: true,
       scale: new Vector(20,20),
+      scene: scene
     });
 
     //doesn't need any components
@@ -44,6 +45,11 @@ class TowerFactory {
     //doesn't need any components
     var move_comp = new TowerMovementComponent({
       name: 'movement'
+    });
+
+    //needs movement component
+    var acc_comp = new TowerAccelerationComponent({
+      name: 'acceleration'
     });
 
     //needs movement component
@@ -67,20 +73,20 @@ class TowerFactory {
 
     tower.add(cooldown_comp);
     tower.add(move_comp);
+    tower.add(acc_comp);
 
     tower.add(fric_comp);
     tower.add(break_comp);
     tower.add(boost_comp);
+
     tower.add(appearance_comp);
 
     cooldown_comp.setup(0.8);
-
-    fric_comp.setup(2);
-    break_comp.setup(4);
+    fric_comp.setup(50);
+    break_comp.setup(200);
 
     //boostpower, top_speed, max_fuel, fuel_recharge
     boost_comp.setup(360, 270, 30000, 200);
-
     tower.geometry = this.makeBasicGeometry();
     tower.geometry.color = new Color().rgb(0xff4400);
 

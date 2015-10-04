@@ -4,6 +4,7 @@ import luxe.Component;
 import luxe.Vector;
 import luxe.Sprite;
 import luxe.Visual;
+import luxe.Entity;
 
 import components.tower.TowerBoostComponent;
 
@@ -25,14 +26,13 @@ class FuelStatBarComponent extends Component {
     statbar = cast entity;
     statbar.size.x = 10;
     statbar.size.y = full;
-
   } //init
 
   override function update(dt:Float) {
     statbar.size.y = (boost_component.fuel / boost_component.max_fuel) * full;
   } //update
 
-  public function setTower(entityName:String){
-    boost_component = cast Luxe.scene.entities.get(entityName).get('boost');
+  public function setTower(_tower:Entity){
+    boost_component = _tower.get('boost');
   }
 }
