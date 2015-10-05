@@ -23,11 +23,9 @@ class TowerBreakComponent extends Component {
   } //init
 
   override function update(dt:Float) {
-
     if ((breaking == true) && (movement.velocity.lengthsq > 0)){
       acceleration.acceleration.add(movement.velocity.inverted.normalized.multiplyScalar(break_friction_power));
     }
-
   } //update
 
   public function setup(fric:Float) {

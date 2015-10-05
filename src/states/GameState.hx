@@ -21,6 +21,8 @@ class GameState extends luxe.States.State {
   var mouse : Vector;
   var zoomfactor : Vector;
   var player : Visual;
+  var other_dude : Visual;
+
   var player_name : String;
 
   private var background_scene : Scene;
@@ -68,6 +70,13 @@ class GameState extends luxe.States.State {
     level_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x223356));
 
     player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
+    tower_factory.setTowerStats(player, 'basic');
+    tower_factory.setTowerAppearance(player, 'red');
+
+    other_dude = tower_factory.createTower(new Vector(Luxe.screen.mid.x+300, Luxe.screen.mid.y), 'other_dude');
+    tower_factory.setTowerStats(other_dude, 'basic');
+    tower_factory.setTowerAppearance(other_dude, 'blue');
+
 
     hud_factory.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632)).setTower(player);
     hud_factory.createFuelStatBar(new Vector(Luxe.screen.w-10-20-20, Luxe.screen.h-20), new Color().rgb(0x673677)).setTower(player);

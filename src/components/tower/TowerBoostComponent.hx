@@ -42,18 +42,8 @@ class TowerBoostComponent extends Component {
 
   override function update(dt:Float) {
     if (boosting == true){
-
       boost_vector = Vector.Subtract(destination,tower.pos).normalized.multiplyScalar(boost_power);
       acceleration_comp.acceleration.add(boost_vector);
-      //
-      // movement.velocity.x += (boost_vector.x);
-      // movement.velocity.y += (boost_vector.y);
-      //
-      // if (movement.velocity.length >= top_speed){
-      //   movement.velocity = movement.velocity.normalized.multiplyScalar(top_speed);
-      // }
-
-
 
       if (fuel > boost_power){
         fuel -= boost_power;
@@ -65,6 +55,7 @@ class TowerBoostComponent extends Component {
       if (Vector.Subtract(destination,tower.pos).length < close_enough_to_destination){
         boostOff();
       }
+
     }else{
       if (fuel < max_fuel){
         fuel += fuel_recharge;
@@ -72,7 +63,6 @@ class TowerBoostComponent extends Component {
         fuel = max_fuel;
       }
     }
-
 
   } //update
 

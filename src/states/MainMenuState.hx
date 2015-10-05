@@ -46,15 +46,16 @@ class MainMenuState extends luxe.States.State {
     trace('mainnenustate onenter');
     menu_factory.createBackdrop(new Color().rgb(0x0d0c1b));
     menu_factory.createTitleSprite();
+
     var mint_btn = menu_factory.createButton('New Game', 15, Luxe.screen.mid.x, 400, 150, 50);
     mint_btn.onmousedown.listen(function(e,c){
       Main.states.set('gamestate');
     });
 
-    var mint_btn2 = menu_factory.createButton('Options', 15, Luxe.screen.mid.x, 450, 150, 50);
-    mint_btn2.onmousedown.listen(function(e,c){
-      trace("clicked");
-    });
+    // var mint_btn2 = menu_factory.createButton('Options', 15, Luxe.screen.mid.x, 450, 150, 50);
+    // mint_btn2.onmousedown.listen(function(e,c){
+    //   trace("clicked");
+    // });
 
   } //onenter
 

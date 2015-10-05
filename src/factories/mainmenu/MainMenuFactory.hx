@@ -55,6 +55,7 @@ class MainMenuFactory {
 
     var new_game_sprite = new Text({
       text: label,
+      name : label,
       pos : new Vector(x, y),
       size : new Vector(w, h),
       point_size : size,
@@ -68,6 +69,7 @@ class MainMenuFactory {
     var new_game_button = new mint.Button({
       parent: Main.canvas,
       text: '',
+      name: 'niks',
       x:new_game_sprite.pos.x-(w/2), y:new_game_sprite.pos.y, w:new_game_sprite.size.x, h:new_game_sprite.size.y,
       visible: true,
       options: {

@@ -24,13 +24,7 @@ class TowerFrictionComponent extends Component {
   override function update(dt:Float) {
     if (movement.velocity.lengthsq > 0){
       acceleration.acceleration.add(movement.velocity.inverted.normalized.multiplyScalar(friction_power));
-    }  
-    // if (movement.velocity.length > friction_power){
-    //   movement.velocity.add(movement.velocity.inverted.normalized.multiplyScalar(friction_power));
-    // } else {
-    //   movement.velocity.x = 0;
-    //   movement.velocity.y = 0;
-    // }
+    }
   } //update
 
   public function setup(fric:Float) {

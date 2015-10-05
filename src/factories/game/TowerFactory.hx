@@ -4,6 +4,9 @@ import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
 import luxe.Scene;
+import luxe.Entity;
+
+
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
@@ -15,6 +18,9 @@ import components.tower.TowerFrictionComponent;
 import components.tower.TowerBoostComponent;
 import components.tower.TowerBreakComponent;
 import components.tower.TowerCooldownComponent;
+import components.tower.TowerHitBodyComponent;
+
+
 
 
 import components.tower.TowerAppearanceComponent;
@@ -28,6 +34,26 @@ class TowerFactory {
     scene = _scene;
   }
 
+  public function setTowerAppearance(tower:luxe.Visual, tower_type:String){
+    if (tower_type == 'red'){
+      tower.geometry = this.makeBasicGeometry();
+      tower.geometry.color = new Color().rgb(0xff4400);
+    }
+    if (tower_type == 'blue'){
+      tower.geometry = this.makeBasicGeometry();
+      tower.geometry.color = new Color().rgb(0x2266ee);
+    }
+  }
+
+  public function setTowerStats(tower:Entity, tower_type:String){
+    if (tower_type == 'basic'){
+      tower.get('cooldown').setup(0.8);
+      tower.get('friction').setup(50);
+      tower.get('break').setup(200);
+      tower.get('boost').setup(360, 270, 30000, 200); //boostpower, top_speed, max_fuel, fuel_recharge
+    }
+  }
+
   public function createTower (pos:Vector, name:String) : Visual{
     var tower = new luxe.Visual({
       name: name,
@@ -37,58 +63,22 @@ class TowerFactory {
       scene: scene
     });
 
-    //doesn't need any components
-    var cooldown_comp = new TowerCooldownComponent({
-      name: 'cooldown'
-    });
-
-    //doesn't need any components
-    var move_comp = new TowerMovementComponent({
-      name: 'movement'
-    });
-
+    // The order of these components are very important
+    // Stand alone
+    tower.add(new TowerCooldownComponent({ name: 'cooldown' }));
+    tower.add(new TowerMovementComponent({ name: 'movement' }));
     //needs movement component
-    var acc_comp = new TowerAccelerationComponent({
-      name: 'acceleration'
-    });
+    tower.add(new TowerAccelerationComponent({ name: 'acceleration' }));
+    //needs movement component and Acceleration Componenets
+    tower.add(new TowerFrictionComponent({ name: 'friction' }));
+    tower.add(new TowerBreakComponent({ name: 'break' }));
+    //needs all of the above
+    tower.add(new TowerBoostComponent({ name: 'boost' }));
+    //needs boost
+    tower.add(new TowerAppearanceComponent({ name: 'appearance' }));
+    tower.add(new TowerHitBodyComponent({ name: 'hitbody' }));
 
-    //needs movement component
-    var fric_comp = new TowerFrictionComponent({
-      name: 'friction'
-    });
 
-    //needs movement component
-    var break_comp = new TowerBreakComponent({
-      name: 'break'
-    });
-
-    //needs movement and break and cooldown cooldown_comp
-    var boost_comp = new TowerBoostComponent({
-      name: 'boost'
-    });
-
-    var appearance_comp = new TowerAppearanceComponent({
-      name: 'appearance'
-    });
-
-    tower.add(cooldown_comp);
-    tower.add(move_comp);
-    tower.add(acc_comp);
-
-    tower.add(fric_comp);
-    tower.add(break_comp);
-    tower.add(boost_comp);
-
-    tower.add(appearance_comp);
-
-    cooldown_comp.setup(0.8);
-    fric_comp.setup(50);
-    break_comp.setup(200);
-
-    //boostpower, top_speed, max_fuel, fuel_recharge
-    boost_comp.setup(360, 270, 30000, 200);
-    tower.geometry = this.makeBasicGeometry();
-    tower.geometry.color = new Color().rgb(0xff4400);
 
     return tower;
 
