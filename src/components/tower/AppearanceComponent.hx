@@ -6,9 +6,9 @@ import luxe.Sprite;
 import luxe.Visual;
 
 
-class TowerAppearanceComponent extends Component {
+class AppearanceComponent extends Component {
 
-  private var booster : TowerBoostComponent;
+  private var booster : BoostComponent;
   private var tower : Visual;
 
   override function init() {

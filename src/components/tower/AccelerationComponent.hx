@@ -6,32 +6,32 @@ import luxe.Sprite;
 import luxe.Visual;
 
 
-class TowerMovementComponent extends Component {
+class AccelerationComponent extends Component {
 
-  private var TAG = 'TowerAccelerationComponent';
-  public var velocity : Vector;
+  private var TAG = 'AccelerationComponent';
   private var tower : Visual;
-
+  private var movement : MovementComponent;
+  public var acceleration : Vector;
 
   public function new(json:Dynamic){
     trace('new');
     super(json);
-    velocity = new Vector(0,0);
+    acceleration = new Vector(0,0);
   }
   override function init() {
     trace('init');
     tower = cast entity;
-    velocity.x = 0;
-    velocity.y = 0;
+    movement = cast get('movement');
 
   } //init
 
   override function update(dt:Float) {
 
-    
+    movement.velocity.x += (acceleration.x * dt);
+    movement.velocity.y += (acceleration.y * dt);
 
-    tower.pos.x += (velocity.x * dt);
-    tower.pos.y += (velocity.y * dt);
+    acceleration.x = 0;
+    acceleration.y = 0;
 
   } //update
 

@@ -8,7 +8,7 @@ import luxe.Entity;
 
 
 
-import components.tower.TowerCooldownComponent;
+import components.tower.CooldownComponent;
 
 class CooldownStatBarComponent extends Component {
 
@@ -16,7 +16,7 @@ class CooldownStatBarComponent extends Component {
   private var full : Float;
   private var tower : Visual;
   private var statbar : Sprite;
-  private var cooldown_component : TowerCooldownComponent;
+  private var cooldown_component : CooldownComponent;
 
   public function new(json:Dynamic) {
     super(json);

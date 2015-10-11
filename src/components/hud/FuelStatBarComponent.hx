@@ -6,7 +6,7 @@ import luxe.Sprite;
 import luxe.Visual;
 import luxe.Entity;
 
-import components.tower.TowerBoostComponent;
+import components.tower.BoostComponent;
 
 class FuelStatBarComponent extends Component {
 
@@ -15,7 +15,7 @@ class FuelStatBarComponent extends Component {
   private var tower : Visual;
   private var statbar : Sprite;
 
-  private var boost_component : TowerBoostComponent;
+  private var boost_component : BoostComponent;
 
   public function new(json:Dynamic) {
     super(json);

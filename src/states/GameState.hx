@@ -21,7 +21,6 @@ class GameState extends luxe.States.State {
   var mouse : Vector;
   var zoomfactor : Vector;
   var player : Visual;
-  var other_dude : Visual;
 
   var player_name : String;
 
@@ -34,6 +33,8 @@ class GameState extends luxe.States.State {
   private var tower_factory : TowerFactory;
   private var level_factory : LevelFactory;
   private var hud_factory : HudFactory;
+  //
+  // private var ForceManagerComponent :
 
 
   //This get created when the Main.hx is ready, so these don't ek destroyed on state changes.
@@ -70,12 +71,19 @@ class GameState extends luxe.States.State {
     level_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x223356));
 
     player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
-    tower_factory.setTowerStats(player, 'basic');
-    tower_factory.setTowerAppearance(player, 'red');
 
-    other_dude = tower_factory.createTower(new Vector(Luxe.screen.mid.x+300, Luxe.screen.mid.y), 'other_dude');
-    tower_factory.setTowerStats(other_dude, 'basic');
-    tower_factory.setTowerAppearance(other_dude, 'blue');
+    var dude : Visual;
+
+    dude = tower_factory.createStilTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
+
+    var rock1 : Visual;
+    var rock2 : Visual;
+    var rock3 : Visual;
+
+    for(i in 0...20){
+      tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
+    }
+
 
 
     hud_factory.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632)).setTower(player);

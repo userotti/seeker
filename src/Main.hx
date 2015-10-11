@@ -76,7 +76,7 @@ class Main extends luxe.Game {
     states.add( new states.GameState({ name:'gamestate' }) );
     states.add( new states.MainMenuState({ name:'mainmenustate' }) );
 
-    states.set( 'mainmenustate' );
+    states.set( 'gamestate' );
   }
 
   override function onmousemove(e) {

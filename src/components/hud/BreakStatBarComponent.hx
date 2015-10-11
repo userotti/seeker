@@ -8,7 +8,7 @@ import luxe.Visual;
 import luxe.Entity;
 
 
-import components.tower.TowerBreakComponent;
+import components.tower.BreakComponent;
 
 class BreakStatBarComponent extends Component {
 
@@ -17,7 +17,7 @@ class BreakStatBarComponent extends Component {
   private var off_color : Color;
   private var tower : Visual;
   private var statbar : Sprite;
-  private var break_component : TowerBreakComponent;
+  private var break_component : BreakComponent;
 
   public function new(json:Dynamic, onColor:Color, offColor:Color) {
     super(json);

@@ -6,7 +6,7 @@ import luxe.Sprite;
 import luxe.Visual;
 
 
-class TowerBoostComponent extends Component {
+class BoostComponent extends Component {
 
   public var boosting : Bool;
   public var boost_vector : Vector;
@@ -17,10 +17,12 @@ class TowerBoostComponent extends Component {
   public var fuel : Float;
   public var top_speed: Float;
   public var fuel_recharge : Float;
-  private var cooldown : TowerCooldownComponent;
-  private var acceleration_comp : TowerAccelerationComponent;
-  private var breaks : TowerBreakComponent;
+  private var cooldown : CooldownComponent;
+  private var acceleration_comp : AccelerationComponent;
+  private var breaks : BreakComponent;
   private var tower : Visual;
+
+
 
   public function new(json:Dynamic){
     super(json);
@@ -42,7 +44,13 @@ class TowerBoostComponent extends Component {
 
   override function update(dt:Float) {
     if (boosting == true){
-      boost_vector = Vector.Subtract(destination,tower.pos).normalized.multiplyScalar(boost_power);
+      boost_vector.x = 0;
+      boost_vector.y = 0;
+
+      boost_vector.x = destination.x - tower.pos.x;
+      boost_vector.y = destination.y - tower.pos.y;
+      boost_vector.normalize();
+      boost_vector.multiplyScalar(boost_power);
       acceleration_comp.acceleration.add(boost_vector);
 
       if (fuel > boost_power){
@@ -51,7 +59,7 @@ class TowerBoostComponent extends Component {
         fuel = 0;
         boostOff();
       }
-
+      
       if (Vector.Subtract(destination,tower.pos).length < close_enough_to_destination){
         boostOff();
       }

@@ -5,13 +5,13 @@ import luxe.Vector;
 import luxe.Sprite;
 import luxe.Visual;
 
-class TowerCooldownComponent extends Component {
+class CooldownComponent extends Component {
 
   public var ready : Bool;
   public var max_cooldown : Float;
   public var cooldown : Float;
-  
-  private var TAG = 'TowerCooldownComponent';
+
+  private var TAG = 'CooldownComponent';
   private var cooldown_recharge : Float;
   private var tower : Visual;
 
@@ -33,7 +33,6 @@ class TowerCooldownComponent extends Component {
   } //update
 
   public function setup(cooldownRecharge:Float) {
-    trace('setup');
     cooldown_recharge = cooldownRecharge;
   } //init
 

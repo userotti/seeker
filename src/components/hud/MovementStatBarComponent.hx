@@ -6,8 +6,8 @@ import luxe.Sprite;
 import luxe.Visual;
 import luxe.Entity;
 
-import components.tower.TowerBoostComponent;
-import components.tower.TowerMovementComponent;
+import components.tower.BoostComponent;
+import components.tower.MovementComponent;
 
 
 
@@ -17,8 +17,8 @@ class MovementStatBarComponent extends Component {
   private var full : Float;
   private var tower : Visual;
   private var statbar : Sprite;
-  private var boost_component : TowerBoostComponent;
-  private var movement_component : TowerMovementComponent;
+  private var boost_component : BoostComponent;
+  private var movement_component : MovementComponent;
 
   public function new(json:Dynamic) {
     super(json);

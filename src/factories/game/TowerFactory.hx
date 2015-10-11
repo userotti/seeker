@@ -11,47 +11,66 @@ import luxe.Entity;
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
 
-import components.tower.TowerMovementComponent;
-import components.tower.TowerAccelerationComponent;
+import components.tower.MovementComponent;
+import components.tower.AccelerationComponent;
 
-import components.tower.TowerFrictionComponent;
-import components.tower.TowerBoostComponent;
-import components.tower.TowerBreakComponent;
-import components.tower.TowerCooldownComponent;
-import components.tower.TowerHitBodyComponent;
+import components.tower.FrictionComponent;
+import components.tower.BoostComponent;
+import components.tower.BreakComponent;
+import components.tower.CooldownComponent;
+import components.tower.ForceBodyComponent;
+import components.tower.ForceFieldComponent;
+import components.tower.ForceManagerComponent;
 
 
 
 
-import components.tower.TowerAppearanceComponent;
+import components.tower.AppearanceComponent;
 
 //This class creates new Sprites and Entities and their components and adds them the scene they got from the state they're a member of.
 class TowerFactory {
 
   private var scene : Scene;
+  private var force_manager : ForceManagerComponent;
 
   public function new(_scene:Scene) {
     scene = _scene;
+    force_manager = new ForceManagerComponent({name: 'force_manager'}, scene);
   }
 
   public function setTowerAppearance(tower:luxe.Visual, tower_type:String){
-    if (tower_type == 'red'){
-      tower.geometry = this.makeBasicGeometry();
-      tower.geometry.color = new Color().rgb(0xff4400);
-    }
-    if (tower_type == 'blue'){
-      tower.geometry = this.makeBasicGeometry();
-      tower.geometry.color = new Color().rgb(0x2266ee);
-    }
+
   }
 
-  public function setTowerStats(tower:Entity, tower_type:String){
-    if (tower_type == 'basic'){
-      tower.get('cooldown').setup(0.8);
-      tower.get('friction').setup(50);
-      tower.get('break').setup(200);
-      tower.get('boost').setup(360, 270, 30000, 200); //boostpower, top_speed, max_fuel, fuel_recharge
-    }
+  public function createStilTower (pos:Vector, name:String) : Visual{
+    var tower = new luxe.Visual({
+      name: name,
+      pos: new Vector(pos.x,pos.y),
+      visible: true,
+      scene: scene
+    });
+
+    tower.add(new ForceFieldComponent({ name: 'forcefield' }));
+    var forcefield = tower.get('forcefield');
+    forcefield.setup(200, -150);//radius, constant_force
+
+    tower.geometry = this.makeCircleGeometry(25);
+    tower.geometry.color = new Color().rgb(0xdd4433);
+
+    var force_field = new luxe.Visual({
+      name: name+"_force_field",
+      parent: tower,
+      visible: true,
+      scene: scene
+    });
+
+
+    force_field.geometry = this.makeCircleGeometry(forcefield.radius);
+    force_field.geometry.color = new Color().set(1,1,1,0.02);
+
+
+    return tower;
+
   }
 
   public function createTower (pos:Vector, name:String) : Visual{
@@ -59,28 +78,82 @@ class TowerFactory {
       name: name,
       pos: new Vector(pos.x,pos.y),
       visible: true,
-      scale: new Vector(20,20),
       scene: scene
     });
 
     // The order of these components are very important
     // Stand alone
-    tower.add(new TowerCooldownComponent({ name: 'cooldown' }));
-    tower.add(new TowerMovementComponent({ name: 'movement' }));
+    tower.add(new CooldownComponent({ name: 'cooldown' }));
+    tower.add(new MovementComponent({ name: 'movement' }));
     //needs movement component
-    tower.add(new TowerAccelerationComponent({ name: 'acceleration' }));
+    tower.add(new AccelerationComponent({ name: 'acceleration' }));
     //needs movement component and Acceleration Componenets
-    tower.add(new TowerFrictionComponent({ name: 'friction' }));
-    tower.add(new TowerBreakComponent({ name: 'break' }));
+    tower.add(new FrictionComponent({ name: 'friction' }));
+    tower.add(new BreakComponent({ name: 'break' }));
     //needs all of the above
-    tower.add(new TowerBoostComponent({ name: 'boost' }));
+    tower.add(new BoostComponent({ name: 'boost' }));
     //needs boost
-    tower.add(new TowerAppearanceComponent({ name: 'appearance' }));
-    tower.add(new TowerHitBodyComponent({ name: 'hitbody' }));
+    tower.add(new AppearanceComponent({ name: 'appearance' }));
 
+    tower.add(force_manager);
+    //needs a force manager
+    tower.add(new ForceBodyComponent({ name: 'forcebody' }));
+    //doesnt nee a forcemanager
+    tower.add(new ForceFieldComponent({ name: 'forcefield' }));
+
+    tower.get('cooldown').setup(4.8);
+    tower.get('friction').setup(50);
+    tower.get('break').setup(200);
+    tower.get('boost').setup(360, 270, 20000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
+
+    var forcefield = tower.get('forcefield');
+    forcefield.setup(150, 200);//radius, constant_force
+
+    tower.geometry = this.makeBasicGeometry();
+    tower.geometry.color = new Color().rgb(0xff4400);
+
+    var force_field = new luxe.Visual({
+      name: name+"_force_field",
+      parent: tower,
+      visible: true,
+      scene: scene
+    });
+
+    force_field.geometry = this.makeCircleGeometry(forcefield.radius);
+    force_field.geometry.color = new Color().set(1,1,1,0.02);
 
 
     return tower;
+
+  }
+
+  public function createRock (pos:Vector, name:String) : Visual{
+    var rock = new luxe.Visual({
+      name: name,
+      pos: new Vector(pos.x,pos.y),
+      visible: true,
+      scene: scene
+    });
+
+    // The order of these components are very important
+    // Stand alone
+     rock.add(new CooldownComponent({ name: 'cooldown' }));
+     rock.add(new MovementComponent({ name: 'movement' }));
+    // //needs movement component
+    rock.add(new AccelerationComponent({ name: 'acceleration' }));
+    //needs movement component and Acceleration Componenets
+    rock.add(new FrictionComponent({ name: 'friction' }));
+
+    rock.add(force_manager);
+    // //needs a force manager
+    rock.add(new ForceBodyComponent({ name: 'forcebody' }));
+
+    rock.geometry = this.makeCircleGeometry(Math.floor(Math.random()*10)+2);
+    rock.geometry.color = new Color().rgb(0x888888);
+
+    rock.get('friction').setup(50);
+
+    return rock;
 
   }
 
@@ -91,13 +164,26 @@ class TowerFactory {
       batcher: Luxe.renderer.batcher
     });
 
-    basic_geo.add(new Vertex(new Vector(-1,-1,0)));
-    basic_geo.add(new Vertex(new Vector(1,-1,0)));
-    basic_geo.add(new Vertex(new Vector(1,1,0)));
+    basic_geo.add(new Vertex(new Vector(-20,-20,0)));
+    basic_geo.add(new Vertex(new Vector(20,-20,0)));
+    basic_geo.add(new Vertex(new Vector(20,20,0)));
 
-    basic_geo.add(new Vertex(new Vector(-1,1,0)));
-    basic_geo.add(new Vertex(new Vector(-1,-1,0)));
-    basic_geo.add(new Vertex(new Vector(1,1,0)));
+    basic_geo.add(new Vertex(new Vector(-20,20,0)));
+    basic_geo.add(new Vertex(new Vector(-20,-20,0)));
+    basic_geo.add(new Vertex(new Vector(20,20,0)));
+
+    return basic_geo;
+  }
+
+  private function makeCircleGeometry(radius:Float) : Geometry {
+    var basic_geo = new phoenix.geometry.CircleGeometry({
+      primitive_type: 0,
+      x: 0,
+      y: 0,
+      r: radius,
+      visible: true,
+      batcher: Luxe.renderer.batcher
+    });
 
     return basic_geo;
   }

@@ -24,7 +24,6 @@ class MainMenuFactory {
   private var scene : Scene;
 
 
-
   public function new(_scene:Scene) {
 
     scene = _scene;
