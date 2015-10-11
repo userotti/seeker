@@ -80,7 +80,7 @@ class GameState extends luxe.States.State {
     var rock2 : Visual;
     var rock3 : Visual;
 
-    for(i in 0...20){
+    for(i in 0...50){
       tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
     }
 

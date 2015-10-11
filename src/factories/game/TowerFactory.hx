@@ -137,22 +137,23 @@ class TowerFactory {
 
     // The order of these components are very important
     // Stand alone
-     rock.add(new CooldownComponent({ name: 'cooldown' }));
-     rock.add(new MovementComponent({ name: 'movement' }));
-    // //needs movement component
-    rock.add(new AccelerationComponent({ name: 'acceleration' }));
-    //needs movement component and Acceleration Componenets
-    rock.add(new FrictionComponent({ name: 'friction' }));
-
+      rock.add(new CooldownComponent({ name: 'cooldown' }));
+      rock.add(new MovementComponent({ name: 'movement' }));
+    // // //needs movement component
+     rock.add(new AccelerationComponent({ name: 'acceleration' }));
+    // //needs movement component and Acceleration Componenets
+     rock.add(new FrictionComponent({ name: 'friction' }));
+    //
     rock.add(force_manager);
     // //needs a force manager
     rock.add(new ForceBodyComponent({ name: 'forcebody' }));
-
+    //
     rock.geometry = this.makeCircleGeometry(Math.floor(Math.random()*10)+2);
     rock.geometry.color = new Color().rgb(0x888888);
 
     rock.get('friction').setup(50);
-
+    //
+    //
     return rock;
 
   }
