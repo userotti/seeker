@@ -29,6 +29,8 @@ class GameState extends luxe.States.State {
   private var level_scene : Scene;
   private var hud_scene : Scene;
 
+  private var level_name : String;
+
   private var background_factory : BackgroundFactory;
   private var tower_factory : TowerFactory;
   private var level_factory : LevelFactory;
@@ -37,10 +39,14 @@ class GameState extends luxe.States.State {
   // private var ForceManagerComponent :
 
 
+
+
   //This get created when the Main.hx is ready, so these don't ek destroyed on state changes.
   public function new(json:Dynamic) {
     trace('new');
     super(json);
+
+    level_name = 'level1';
 
     background_scene = new Scene('background_scene');
     collision_scene = new Scene('collision_scene');
@@ -61,29 +67,21 @@ class GameState extends luxe.States.State {
 
   }
 
+  public function setLevel(_level_name:String){
+    level_name = _level_name;
+  }
+
   //When you land on this state. This function gets called, (everytime a new game starts).
   override function onenter<T>(_:T) {
     trace('onenter');
     player_name = 'fokker';
     zoomfactor = new Vector(0,0);
 
-    background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
-    level_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x223356));
-
     player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
 
-    var dude : Visual;
 
-    dude = tower_factory.createStilTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
-
-    var rock1 : Visual;
-    var rock2 : Visual;
-    var rock3 : Visual;
-
-    for(i in 0...50){
-      tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
-    }
-
+    //Build the level
+    buildLevel();
 
 
     hud_factory.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632)).setTower(player);
@@ -118,6 +116,30 @@ class GameState extends luxe.States.State {
     Luxe.camera.center.y = player.pos.y;
 
     Luxe.camera.zoom = 1;// - (zoomfactor.lengthsq * 0.00000025);
+  }
+
+  private function buildLevel(){
+    switch level_name{
+    case 'level1':
+      background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
+      level_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x223356));
+
+      tower_factory.createStilTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
+
+      for(i in 0...5){
+        tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
+      };
+    case 'level2':
+      background_factory.createBackdrop(new Color().rgb(0x071c16));
+      level_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x626356));
+
+      tower_factory.createStilTower(new Vector(Luxe.screen.mid.x - 150, Luxe.screen.mid.y-400), "dude1");
+      tower_factory.createStilTower(new Vector(Luxe.screen.mid.x + 150, Luxe.screen.mid.y-400), "dude2");
+
+      for(i in 0...10){
+        tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200), 'rock1'+i);
+      };
+    }
   }
 
 }

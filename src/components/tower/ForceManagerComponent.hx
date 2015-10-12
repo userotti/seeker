@@ -34,7 +34,6 @@ class ForceManagerComponent extends Component {
         utility_force_field = tower.get('forcefield');
         if (utility_force_field != null){
           if(simpleCollision(body, utility_force_field)){
-            trace('im being forced' + body.name + body.tower.name);
             utility_force_field.force(body);
           }
         }

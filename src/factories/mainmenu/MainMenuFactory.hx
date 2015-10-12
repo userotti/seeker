@@ -50,11 +50,11 @@ class MainMenuFactory {
     return title_sprite;
   }
 
-  public function createButton (label:String, size:Float, x:Float, y:Float, w:Float, h:Float){
+  public function createButton (_label:String, size:Float, x:Float, y:Float, w:Float, h:Float){
 
     var new_game_sprite = new Text({
-      text: label,
-      name : label,
+      text: _label,
+      name: _label,
       pos : new Vector(x, y),
       size : new Vector(w, h),
       point_size : size,
@@ -67,8 +67,8 @@ class MainMenuFactory {
 
     var new_game_button = new mint.Button({
       parent: Main.canvas,
-      text: '',
-      name: 'niks',
+      text: null,
+      name: _label,
       x:new_game_sprite.pos.x-(w/2), y:new_game_sprite.pos.y, w:new_game_sprite.size.x, h:new_game_sprite.size.y,
       visible: true,
       options: {

@@ -75,6 +75,7 @@ class TowerFactory {
 
   public function createTower (pos:Vector, name:String) : Visual{
     var tower = new luxe.Visual({
+      depth: 10,
       name: name,
       pos: new Vector(pos.x,pos.y),
       visible: true,
@@ -107,7 +108,7 @@ class TowerFactory {
     tower.get('boost').setup(360, 270, 20000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
 
     var forcefield = tower.get('forcefield');
-    forcefield.setup(150, 200);//radius, constant_force
+    forcefield.setup(150, 150);//radius, constant_force
 
     tower.geometry = this.makeBasicGeometry();
     tower.geometry.color = new Color().rgb(0xff4400);
@@ -135,25 +136,20 @@ class TowerFactory {
       scene: scene
     });
 
-    // The order of these components are very important
-    // Stand alone
-      rock.add(new CooldownComponent({ name: 'cooldown' }));
-      rock.add(new MovementComponent({ name: 'movement' }));
+    rock.add(new MovementComponent({ name: 'movement' }));
     // // //needs movement component
-     rock.add(new AccelerationComponent({ name: 'acceleration' }));
+    rock.add(new AccelerationComponent({ name: 'acceleration' }));
     // //needs movement component and Acceleration Componenets
-     rock.add(new FrictionComponent({ name: 'friction' }));
-    //
+    rock.add(new FrictionComponent({ name: 'friction' }));
+
     rock.add(force_manager);
     // //needs a force manager
     rock.add(new ForceBodyComponent({ name: 'forcebody' }));
-    //
+    rock.get('friction').setup(100);
+
     rock.geometry = this.makeCircleGeometry(Math.floor(Math.random()*10)+2);
     rock.geometry.color = new Color().rgb(0x888888);
 
-    rock.get('friction').setup(50);
-    //
-    //
     return rock;
 
   }

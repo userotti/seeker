@@ -20,6 +20,7 @@ class LevelFactory {
   public function createBasicBackgroundShape(scale:Vector, pos:Vector, color:Color) {
     var shape = new luxe.Visual({
       pos: new Vector(pos.x,pos.y),
+      depth: -10,
       visible: true,
       scale: new Vector(scale.x,scale.y),
       scene: scene

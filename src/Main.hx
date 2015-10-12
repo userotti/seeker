@@ -30,6 +30,11 @@ class Main extends luxe.Game {
 
   public static var states : luxe.States;
 
+  public static var game_state : GameState;
+  public static var main_menu_state : MainMenuState;
+
+
+
   public static var main_font;
   //Mint vibes
   public static var disp : Text;
@@ -73,10 +78,13 @@ class Main extends luxe.Game {
     // });
 
     states = new luxe.States({ name:'states' });
-    states.add( new states.GameState({ name:'gamestate' }) );
-    states.add( new states.MainMenuState({ name:'mainmenustate' }) );
+    game_state = new states.GameState({ name:'gamestate' });
+    states.add(game_state);
 
-    states.set( 'gamestate' );
+    main_menu_state = new states.MainMenuState({ name:'mainmenustate' });
+    states.add(main_menu_state);
+    
+    states.set( 'mainmenustate' );
   }
 
   override function onmousemove(e) {
