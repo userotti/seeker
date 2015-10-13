@@ -17,18 +17,12 @@ class FPS extends Text {
         def(_options.point_size, 14);
         def(_options.align, TextAlign.right);
         def(_options.batcher, batcher);
-
-
-
         super(_options);
 
     } //new
 
     public override function update(dt:Float) {
-
-        // text = 'fps : ' + Math.round(1.0/dt);
         text = 'FPS : ' + Math.round(1.0/Luxe.debug.dt_average);
-
     } //update
 
 } //FPS

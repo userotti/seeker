@@ -5,6 +5,7 @@ import luxe.Visual;
 import luxe.Color;
 import luxe.Scene;
 import luxe.Entity;
+import luxe.Sprite;
 
 
 
@@ -21,6 +22,9 @@ import components.tower.CooldownComponent;
 import components.tower.ForceBodyComponent;
 import components.tower.ForceFieldComponent;
 import components.tower.ForceManagerComponent;
+import components.utility.ForceIndicatorManager;
+
+
 
 
 
@@ -57,16 +61,16 @@ class TowerFactory {
     tower.geometry = this.makeCircleGeometry(25);
     tower.geometry.color = new Color().rgb(0xdd4433);
 
-    var force_field = new luxe.Visual({
-      name: name+"_force_field",
-      parent: tower,
-      visible: true,
-      scene: scene
-    });
+    // var force_field = new luxe.Visual({
+    //   name: name+"_force_field",
+    //   parent: tower,
+    //   visible: true,
+    //   scene: scene
+    // });
 
 
-    force_field.geometry = this.makeCircleGeometry(forcefield.radius);
-    force_field.geometry.color = new Color().set(1,1,1,0.02);
+    // force_field.geometry = this.makeCircleGeometry(forcefield.radius);
+    // force_field.geometry.color = new Color().set(1,1,1,0.02);
 
 
     return tower;
@@ -97,6 +101,21 @@ class TowerFactory {
     tower.add(new AppearanceComponent({ name: 'appearance' }));
 
     tower.add(force_manager);
+
+    var force_indicator = new Sprite({
+      name: "_force_indicator",
+      pos: new Vector(0,0),
+      origin: new Vector(40,5),
+      rotation_z: 45,
+      visible: true,
+      centered: true,
+      texture : Luxe.resources.texture("assets/images/rasters/square10x10.png"),
+      parent: tower,
+      scene: scene,
+      batcher: Luxe.renderer.batcher
+    });
+    force_indicator.add(new ForceIndicatorManager({name: 'forceindicator'}));
+
     //needs a force manager
     tower.add(new ForceBodyComponent({ name: 'forcebody' }));
     //doesnt nee a forcemanager
@@ -113,15 +132,15 @@ class TowerFactory {
     tower.geometry = this.makeBasicGeometry();
     tower.geometry.color = new Color().rgb(0xff4400);
 
-    var force_field = new luxe.Visual({
-      name: name+"_force_field",
-      parent: tower,
-      visible: true,
-      scene: scene
-    });
-
-    force_field.geometry = this.makeCircleGeometry(forcefield.radius);
-    force_field.geometry.color = new Color().set(1,1,1,0.02);
+    // var force_field = new luxe.Visual({
+    //   name: "_force_field",
+    //   parent: tower,
+    //   visible: true,
+    //   scene: scene
+    // });
+    //
+    // force_field.geometry = this.makeCircleGeometry(forcefield.radius);
+    // force_field.geometry.color = new Color().set(1,1,1,0.02);
 
 
     return tower;
@@ -144,15 +163,30 @@ class TowerFactory {
 
     rock.add(force_manager);
     // //needs a force manager
+
+    var force_indicator = new Sprite({
+      name: "_force_indicator",
+      pos: new Vector(0,0),
+      origin: new Vector(30,5),
+      rotation_z: 45,
+      visible: true,
+      centered: true,
+      texture : Luxe.resources.texture("assets/images/rasters/square10x10.png"),
+      parent: rock,
+      scene: scene,
+      batcher: Luxe.renderer.batcher
+    });
+    force_indicator.add(new ForceIndicatorManager({name: 'forceindicator'}));
+
     rock.add(new ForceBodyComponent({ name: 'forcebody' }));
     rock.get('friction').setup(100);
-
-    rock.geometry = this.makeCircleGeometry(Math.floor(Math.random()*10)+2);
+    rock.geometry = this.makeCircleGeometry(Math.floor(Math.random()*10)+4);
     rock.geometry.color = new Color().rgb(0x888888);
 
     return rock;
 
   }
+
 
   private function makeBasicGeometry() : Geometry {
     var basic_geo = new phoenix.geometry.Geometry({

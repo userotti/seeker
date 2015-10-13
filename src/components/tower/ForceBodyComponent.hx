@@ -13,10 +13,11 @@ class ForceBodyComponent extends Component {
   public var tower : Visual;
   public var radius : Float;
   private var force_manager : ForceManagerComponent;
+  public var total_force : Vector;
 
   public function new(json:Dynamic){
     super(json);
-
+    total_force = new Vector(0,0);
   }
 
   override function init() {
@@ -24,11 +25,18 @@ class ForceBodyComponent extends Component {
     force_manager = cast get('force_manager');
     radius = 1;
 
+    //trace('childeren '+tower.get_any('forceindicator', true, true).length);
   } //init
-
 
   override function update(dt:Float) {
     force_manager.force(this);
+
+    tower.get('acceleration').acceleration.add(total_force);
+    tower.get('forceindicator', true).setForce(total_force.y, total_force.x);
+
+    total_force.x = 0;
+    total_force.y = 0;
+
   } //update
 
   public function setRadius(_r:Float){

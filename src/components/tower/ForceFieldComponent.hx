@@ -41,7 +41,7 @@ class ForceFieldComponent extends Component {
 
     utility_vector.normalize();
     utility_vector.multiplyScalar(constant_force);
-    body.tower.get('acceleration').acceleration.add(utility_vector);
+    body.total_force.add(utility_vector);
   } //update
 
   public function setup (_r:Float, _f:Float){

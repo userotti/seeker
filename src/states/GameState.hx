@@ -35,11 +35,6 @@ class GameState extends luxe.States.State {
   private var tower_factory : TowerFactory;
   private var level_factory : LevelFactory;
   private var hud_factory : HudFactory;
-  //
-  // private var ForceManagerComponent :
-
-
-
 
   //This get created when the Main.hx is ready, so these don't ek destroyed on state changes.
   public function new(json:Dynamic) {
@@ -47,7 +42,6 @@ class GameState extends luxe.States.State {
     super(json);
 
     level_name = 'level1';
-
     background_scene = new Scene('background_scene');
     collision_scene = new Scene('collision_scene');
     level_scene = new Scene('level_scene');
@@ -55,18 +49,15 @@ class GameState extends luxe.States.State {
 
     //Background Batcher, different Camera, doesn't move, adds things to the background scene.
     background_factory = new BackgroundFactory(background_scene);
-
     //Default Batcher, main game Camera, adds things to the Collision Scene
     tower_factory = new TowerFactory(collision_scene);
-
     //Default Bactcher, main game Camrea, adds things to the Level Scene, level scene is basicly everthings that is not a collidable.
     level_factory = new LevelFactory(level_scene);
-
     //Hud Batcher, different Camera, all the hud things.
     hud_factory = new HudFactory(hud_scene);
-
   }
 
+  //need to call this before you go to the new level.
   public function setLevel(_level_name:String){
     level_name = _level_name;
   }
@@ -79,10 +70,8 @@ class GameState extends luxe.States.State {
 
     player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
 
-
     //Build the level
     buildLevel();
-
 
     hud_factory.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632)).setTower(player);
     hud_factory.createFuelStatBar(new Vector(Luxe.screen.w-10-20-20, Luxe.screen.h-20), new Color().rgb(0x673677)).setTower(player);
@@ -97,7 +86,6 @@ class GameState extends luxe.States.State {
     player.get('boost').boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
 
   } //onmousemove
-
 
   //This gets called when the state changes. Menu -> Game
   override function onleave<T>(_:T) {
@@ -118,11 +106,12 @@ class GameState extends luxe.States.State {
     Luxe.camera.zoom = 1;// - (zoomfactor.lengthsq * 0.00000025);
   }
 
+  //this needs to be removed into some other class
   private function buildLevel(){
     switch level_name{
     case 'level1':
       background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
-      level_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x223356));
+      level_factory.createBushes(20,20,-500,-500, 200, 120);
 
       tower_factory.createStilTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
 
@@ -131,12 +120,12 @@ class GameState extends luxe.States.State {
       };
     case 'level2':
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-      level_factory.createBackgroundShapeMatrix(20,20,-500,-500, 200, new Color().rgb(0x626356));
+      level_factory.createBushes(20,20,-500,-500, 200, 100);
 
       tower_factory.createStilTower(new Vector(Luxe.screen.mid.x - 150, Luxe.screen.mid.y-400), "dude1");
       tower_factory.createStilTower(new Vector(Luxe.screen.mid.x + 150, Luxe.screen.mid.y-400), "dude2");
 
-      for(i in 0...10){
+      for(i in 0...50){
         tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200), 'rock1'+i);
       };
     }
