@@ -110,23 +110,24 @@ class GameState extends luxe.States.State {
   private function buildLevel(){
     switch level_name{
     case 'level1':
+      trace('build() ? 1');
       background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
-      level_factory.createBushes(20,20,-500,-500, 200, 120);
+      //level_factory.createBushes(20,20,-500,-500, 200, 120);
 
-      tower_factory.createStilTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
+      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
 
-      for(i in 0...5){
-        tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
+      for(i in 0...30){
+        tower_factory.createYellowOre(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
       };
     case 'level2':
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-      level_factory.createBushes(20,20,-500,-500, 200, 100);
+      //level_factory.createBushes(20,20,-500,-500, 200, 100);
 
-      tower_factory.createStilTower(new Vector(Luxe.screen.mid.x - 150, Luxe.screen.mid.y-400), "dude1");
-      tower_factory.createStilTower(new Vector(Luxe.screen.mid.x + 150, Luxe.screen.mid.y-400), "dude2");
+      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x - 150, Luxe.screen.mid.y-400), "dude1");
+      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x + 150, Luxe.screen.mid.y-400), "dude2");
 
       for(i in 0...50){
-        tower_factory.createRock(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200), 'rock1'+i);
+        tower_factory.createYellowOre(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200), 'rock1'+i);
       };
     }
   }

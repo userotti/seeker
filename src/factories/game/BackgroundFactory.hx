@@ -4,6 +4,7 @@ import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
 import luxe.Scene;
+import luxe.Sprite;
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
@@ -32,30 +33,17 @@ class BackgroundFactory {
 
   //Builder Functions
   public function createBackdrop (_color:Color){
-    var shape = new luxe.Visual({
-      pos: new Vector(0,0),
-      visible: true,
-      scale: new Vector(1,1),
-      scene: scene
-    });
 
-    var basic_geo = new phoenix.geometry.Geometry({
-      id: 'basic_geo',
-      primitive_type: 4,
+  
+
+    var backdrop = new Sprite({
+      pos: new Vector(0,0),
+      centered: false,
       visible: true,
+      texture : Luxe.resources.texture("assets/images/rasters/game_background_blue3.png"),
+      scene: scene,
       batcher: background_batcher
     });
-
-    basic_geo.add(new Vertex(new Vector(0,0,0)));
-    basic_geo.add(new Vertex(new Vector(Luxe.screen.w,0,0)));
-    basic_geo.add(new Vertex(new Vector(Luxe.screen.w,Luxe.screen.h,0)));
-
-    basic_geo.add(new Vertex(new Vector(0,Luxe.screen.h,0)));
-    basic_geo.add(new Vertex(new Vector(0,0,0)));
-    basic_geo.add(new Vertex(new Vector(Luxe.screen.w,Luxe.screen.h,0)));
-
-    shape.geometry = basic_geo;
-    shape.geometry.color = _color;
 
   }
 

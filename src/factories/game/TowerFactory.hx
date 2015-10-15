@@ -46,44 +46,44 @@ class TowerFactory {
 
   }
 
-  public function createStilTower (pos:Vector, name:String) : Visual{
-    var tower = new luxe.Visual({
+  public function createMetalNest (pos:Vector, name:String) : Visual{
+
+    var nest = new luxe.Sprite({
       name: name,
       pos: new Vector(pos.x,pos.y),
       visible: true,
-      scene: scene
+      scene: scene,
+      centered: true,
+      texture : Luxe.resources.texture("assets/images/rasters/metal_nest-01.png"),
+      batcher: Luxe.renderer.batcher
     });
 
-    tower.add(new ForceFieldComponent({ name: 'forcefield' }));
-    var forcefield = tower.get('forcefield');
+    var spikes = new Sprite({
+      name: name+"_spikes",
+      pos: new Vector(pos.x,pos.y),
+      centered: true,
+      texture : Luxe.resources.texture("assets/images/rasters/metal_nest_spikes-01.png"),
+      scene: scene,
+      batcher: Luxe.renderer.batcher
+    });
+
+    nest.add(new ForceFieldComponent({ name: 'forcefield' }));
+    var forcefield = nest.get('forcefield');
     forcefield.setup(200, -150);//radius, constant_force
 
-    tower.geometry = this.makeCircleGeometry(25);
-    tower.geometry.color = new Color().rgb(0xdd4433);
-
-    // var force_field = new luxe.Visual({
-    //   name: name+"_force_field",
-    //   parent: tower,
-    //   visible: true,
-    //   scene: scene
-    // });
-
-
-    // force_field.geometry = this.makeCircleGeometry(forcefield.radius);
-    // force_field.geometry.color = new Color().set(1,1,1,0.02);
-
-
-    return tower;
+    return nest;
 
   }
 
   public function createTower (pos:Vector, name:String) : Visual{
-    var tower = new luxe.Visual({
-      depth: 10,
+    var tower = new luxe.Sprite({
       name: name,
       pos: new Vector(pos.x,pos.y),
       visible: true,
-      scene: scene
+      scene: scene,
+      centered: true,
+      texture : Luxe.resources.texture("assets/images/rasters/metal_guy-01.png"),
+      batcher: Luxe.renderer.batcher
     });
 
     // The order of these components are very important
@@ -103,13 +103,9 @@ class TowerFactory {
     tower.add(force_manager);
 
     var force_indicator = new Sprite({
-      name: "_force_indicator",
-      pos: new Vector(0,0),
-      origin: new Vector(40,5),
-      rotation_z: 45,
+      name: "_force_indTOWERicator",
       visible: true,
-      centered: true,
-      texture : Luxe.resources.texture("assets/images/rasters/square10x10.png"),
+      texture : Luxe.resources.texture("assets/images/rasters/force_indicator-01.png"),
       parent: tower,
       scene: scene,
       batcher: Luxe.renderer.batcher
@@ -129,94 +125,48 @@ class TowerFactory {
     var forcefield = tower.get('forcefield');
     forcefield.setup(150, 150);//radius, constant_force
 
-    tower.geometry = this.makeBasicGeometry();
-    tower.geometry.color = new Color().rgb(0xff4400);
-
-    // var force_field = new luxe.Visual({
-    //   name: "_force_field",
-    //   parent: tower,
-    //   visible: true,
-    //   scene: scene
-    // });
-    //
-    // force_field.geometry = this.makeCircleGeometry(forcefield.radius);
-    // force_field.geometry.color = new Color().set(1,1,1,0.02);
-
-
     return tower;
 
   }
 
-  public function createRock (pos:Vector, name:String) : Visual{
-    var rock = new luxe.Visual({
+  public function createYellowOre (pos:Vector, name:String) : Visual{
+    var ore = new luxe.Sprite({
       name: name,
       pos: new Vector(pos.x,pos.y),
       visible: true,
-      scene: scene
+      rotation_z: Math.random()*360,
+      scene: scene,
+      texture : Luxe.resources.texture("assets/images/rasters/yellow_ore-01.png"),
+      batcher: Luxe.renderer.batcher
     });
 
-    rock.add(new MovementComponent({ name: 'movement' }));
+    ore.add(new MovementComponent({ name: 'movement' }));
     // // //needs movement component
-    rock.add(new AccelerationComponent({ name: 'acceleration' }));
+    ore.add(new AccelerationComponent({ name: 'acceleration' }));
     // //needs movement component and Acceleration Componenets
-    rock.add(new FrictionComponent({ name: 'friction' }));
+    ore.add(new FrictionComponent({ name: 'friction' }));
 
-    rock.add(force_manager);
+    ore.add(force_manager);
     // //needs a force manager
 
     var force_indicator = new Sprite({
       name: "_force_indicator",
-      pos: new Vector(0,0),
-      origin: new Vector(30,5),
-      rotation_z: 45,
+      pos: new Vector(15,15),
+      origin: new Vector(25+15,0+15),
       visible: true,
-      centered: true,
-      texture : Luxe.resources.texture("assets/images/rasters/square10x10.png"),
-      parent: rock,
+      texture : Luxe.resources.texture("assets/images/rasters/force_indicator-01.png"),
+      parent: ore,
       scene: scene,
       batcher: Luxe.renderer.batcher
     });
     force_indicator.add(new ForceIndicatorManager({name: 'forceindicator'}));
 
-    rock.add(new ForceBodyComponent({ name: 'forcebody' }));
-    rock.get('friction').setup(100);
-    rock.geometry = this.makeCircleGeometry(Math.floor(Math.random()*10)+4);
-    rock.geometry.color = new Color().rgb(0x888888);
+    ore.add(new ForceBodyComponent({ name: 'forcebody' }));
+    ore.get('friction').setup(100);
 
-    return rock;
+    return ore;
 
   }
 
-
-  private function makeBasicGeometry() : Geometry {
-    var basic_geo = new phoenix.geometry.Geometry({
-      primitive_type: 4,
-      visible: true,
-      batcher: Luxe.renderer.batcher
-    });
-
-    basic_geo.add(new Vertex(new Vector(-20,-20,0)));
-    basic_geo.add(new Vertex(new Vector(20,-20,0)));
-    basic_geo.add(new Vertex(new Vector(20,20,0)));
-
-    basic_geo.add(new Vertex(new Vector(-20,20,0)));
-    basic_geo.add(new Vertex(new Vector(-20,-20,0)));
-    basic_geo.add(new Vertex(new Vector(20,20,0)));
-
-    return basic_geo;
-  }
-
-  private function makeCircleGeometry(radius:Float) : Geometry {
-    var basic_geo = new phoenix.geometry.CircleGeometry({
-      primitive_type: 0,
-      x: 0,
-      y: 0,
-      r: radius,
-      visible: true,
-      batcher: Luxe.renderer.batcher
-    });
-
-    return basic_geo;
-  }
 
 }
