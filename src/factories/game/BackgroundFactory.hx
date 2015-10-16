@@ -34,8 +34,6 @@ class BackgroundFactory {
   //Builder Functions
   public function createBackdrop (_color:Color){
 
-  
-
     var backdrop = new Sprite({
       pos: new Vector(0,0),
       centered: false,

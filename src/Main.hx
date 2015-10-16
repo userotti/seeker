@@ -54,10 +54,15 @@ class Main extends luxe.Game {
 
     config.preload.textures.push({ id:'assets/images/rasters/game_background_blue3.png' }); //1024 x 768
     config.preload.textures.push({ id:'assets/images/rasters/metal_guy-01.png' }); //65 x 65
+    config.preload.textures.push({ id:'assets/images/rasters/metal_guy_green-01.png' }); //65 x 65
+    config.preload.textures.push({ id:'assets/images/rasters/metal_guy_red-01.png' }); //65 x 65
+
     config.preload.textures.push({ id:'assets/images/rasters/metal_nest-01.png' }); //180 x 180
     config.preload.textures.push({ id:'assets/images/rasters/metal_nest_spikes-01.png' }); //180 x 180
     config.preload.textures.push({ id:'assets/images/rasters/yellow_ore-01.png' }); //30 x 30
     config.preload.textures.push({ id:'assets/images/rasters/force_indicator-01.png' }); //30 x 7?
+    config.preload.textures.push({ id:'assets/images/rasters/smoke_triangle-01.png' }); //30 x 7?
+
 
 
     config.preload.fonts.push({ id:'assets/fonts/basicfont/font.fnt' });

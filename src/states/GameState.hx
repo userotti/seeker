@@ -66,7 +66,6 @@ class GameState extends luxe.States.State {
   override function onenter<T>(_:T) {
     trace('onenter');
     player_name = 'fokker';
-    zoomfactor = new Vector(0,0);
 
     player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
 
@@ -110,23 +109,21 @@ class GameState extends luxe.States.State {
   private function buildLevel(){
     switch level_name{
     case 'level1':
-      trace('build() ? 1');
       background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
-      //level_factory.createBushes(20,20,-500,-500, 200, 120);
 
-      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
-
-      for(i in 0...30){
+      for(i in 0...1){
         tower_factory.createYellowOre(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
       };
+      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
+
+
     case 'level2':
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-      //level_factory.createBushes(20,20,-500,-500, 200, 100);
 
       tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x - 150, Luxe.screen.mid.y-400), "dude1");
       tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x + 150, Luxe.screen.mid.y-400), "dude2");
 
-      for(i in 0...50){
+      for(i in 0...40){
         tower_factory.createYellowOre(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200), 'rock1'+i);
       };
     }

@@ -14,10 +14,13 @@ class ForceBodyComponent extends Component {
   public var radius : Float;
   private var force_manager : ForceManagerComponent;
   public var total_force : Vector;
+  public var total_force_record : Vector;
+    public var being_forced : Bool;
 
   public function new(json:Dynamic){
     super(json);
     total_force = new Vector(0,0);
+    total_force_record = new Vector(0,0);
   }
 
   override function init() {
@@ -31,11 +34,20 @@ class ForceBodyComponent extends Component {
   override function update(dt:Float) {
     force_manager.force(this);
 
-    tower.get('acceleration').acceleration.add(total_force);
-    tower.get('forceindicator', true).setForce(total_force.y, total_force.x);
+    if (being_forced == true){
+      total_force_record.x = total_force.x;
+      total_force_record.y = total_force.y;
+      tower.get('acceleration').acceleration.add(total_force);
+      total_force.x = 0;
+      total_force.y = 0;
+      being_forced = false;
+    }else{
+      total_force_record.x = 0;
+      total_force_record.y = 0;
+    }
 
-    total_force.x = 0;
-    total_force.y = 0;
+
+
 
   } //update
 

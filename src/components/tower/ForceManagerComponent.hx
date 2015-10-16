@@ -34,6 +34,7 @@ class ForceManagerComponent extends Component {
         utility_force_field = tower.get('forcefield');
         if (utility_force_field != null){
           if(simpleCollision(body, utility_force_field)){
+            body.being_forced = true;
             utility_force_field.force(body);
           }
         }
@@ -42,11 +43,16 @@ class ForceManagerComponent extends Component {
   }
 
   public function simpleCollision(_body:ForceBodyComponent, _field: ForceFieldComponent){
-    if ((Math.pow(_body.pos.x - _field.pos.x, 2) + Math.pow(_body.pos.y - _field.pos.y, 2)) < Math.pow(_body.radius - _field.radius, 2)){
-      return true;
-    }else{
-      return false;
+
+    if (Math.abs(_body.pos.x - _field.pos.x) < _field.radius){
+      if (Math.abs(_body.pos.y - _field.pos.y) < _field.radius){
+        if ((Math.pow(_body.pos.x - _field.pos.x, 2) + Math.pow(_body.pos.y - _field.pos.y, 2)) < Math.pow(_body.radius - _field.radius, 2)){
+          return true;
+        }
+      }
     }
+
+    return false;
 
   }
   override function update(dt:Float) {
