@@ -44,7 +44,7 @@ class MainMenuState extends luxe.States.State {
   //onenter
   override function onenter<T>(_:T) {
     trace('mainnenustate onenter');
-    menu_factory.createBackdrop(new Color().rgb(0x0d0c1b));
+    menu_factory.createBackdrop();
     menu_factory.createTitleSprite();
 
     var mint_btn = menu_factory.createButton('level1', 15, Luxe.screen.mid.x, 350, 150, 50);

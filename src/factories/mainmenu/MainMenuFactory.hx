@@ -38,9 +38,9 @@ class MainMenuFactory {
   public function createTitleSprite () {
     title_sprite = new Sprite({
       name:'title',
-      texture : Luxe.resources.texture('assets/images/rasters/mainmenu/title800x205.png'),
-      pos : new Vector(Luxe.screen.mid.x,180),
-      centered : true,
+      texture : Luxe.resources.texture('assets/images/rasters/mainmenu_title-01.png'),
+      pos : new Vector(0,0),
+      centered : false,
       visible: true,
       scale: new Vector(1,1),
       scene: scene,
@@ -94,33 +94,18 @@ class MainMenuFactory {
     return new_game_button;
   }
 
-  public function createBackdrop (color:Color){
-    var shape = new luxe.Visual({
-      pos: new Vector(0,0),
+  public function createBackdrop (){
+    title_sprite = new Sprite({
+      name:'backdrop',
+      texture : Luxe.resources.texture('assets/images/rasters/game_background_blue4_title-01.png'),
+      pos : new Vector(0,0),
+      centered : false,
       visible: true,
       scale: new Vector(1,1),
-      scene: scene
-    });
-
-    var basic_geo = new phoenix.geometry.Geometry({
-      id: 'basic_geo',
-      primitive_type: 4,
-      visible: true,
+      scene: scene,
       batcher: menu_batcher
     });
 
-    basic_geo.add(new Vertex(new Vector(0,0,0)));
-    basic_geo.add(new Vertex(new Vector(Luxe.screen.w,0,0)));
-    basic_geo.add(new Vertex(new Vector(Luxe.screen.w,Luxe.screen.h,0)));
-
-    basic_geo.add(new Vertex(new Vector(0,Luxe.screen.h,0)));
-    basic_geo.add(new Vertex(new Vector(0,0,0)));
-    basic_geo.add(new Vertex(new Vector(Luxe.screen.w,Luxe.screen.h,0)));
-
-    shape.geometry = basic_geo;
-    shape.geometry.color = color;
-
-    return shape;
-
+    return title_sprite;
   }
 }

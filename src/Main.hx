@@ -47,6 +47,10 @@ class Main extends luxe.Game {
 
   override function config(config:luxe.AppConfig) {
     config.preload.textures.push({ id:'assets/images/rasters/mainmenu/title800x205.png' });
+
+    config.preload.textures.push({ id:'assets/images/rasters/mainmenu_title-01.png' });
+    config.preload.textures.push({ id:'assets/images/rasters/game_background_blue4_title-01.png' });
+
     config.preload.textures.push({ id:'assets/images/rasters/bushes-01.png' }); //25 x 25
     config.preload.textures.push({ id:'assets/images/rasters/bushes-02.png' }); //25 x 25
     config.preload.textures.push({ id:'assets/images/rasters/bushes-03.png' }); //25 x 25
@@ -66,13 +70,14 @@ class Main extends luxe.Game {
 
 
     config.preload.fonts.push({ id:'assets/fonts/basicfont/font.fnt' });
-    config.render.antialiasing = 0;
+    config.render.antialiasing = 1;
     return config;
   } //config 
 
   override function ready() {
 
     Luxe.renderer.clear_color.rgb(0x121219);
+
 
     rendering = new LuxeMintRender();
     layout = new Margins();

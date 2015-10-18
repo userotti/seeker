@@ -6,6 +6,7 @@ import luxe.Color;
 import luxe.Sprite;
 import luxe.Visual;
 import luxe.Scene;
+import luxe.Sprite;
 
 import phoenix.Camera;
 import phoenix.Matrix;
@@ -20,7 +21,7 @@ class GameState extends luxe.States.State {
 
   var mouse : Vector;
   var zoomfactor : Vector;
-  var player : Visual;
+  var player : Sprite;
 
   var player_name : String;
 
@@ -55,6 +56,8 @@ class GameState extends luxe.States.State {
     level_factory = new LevelFactory(level_scene);
     //Hud Batcher, different Camera, all the hud things.
     hud_factory = new HudFactory(hud_scene);
+
+
   }
 
   //need to call this before you go to the new level.
@@ -64,10 +67,8 @@ class GameState extends luxe.States.State {
 
   //When you land on this state. This function gets called, (everytime a new game starts).
   override function onenter<T>(_:T) {
-    trace('onenter');
-    player_name = 'fokker';
 
-    player = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), player_name);
+    tower_factory.setupPools(10, 100); //tower,
 
     //Build the level
     buildLevel();
@@ -82,25 +83,29 @@ class GameState extends luxe.States.State {
   //Click on the gate state
   override function onmousedown( event:MouseEvent ) {
     trace('onmousedown');
-    player.get('boost').boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
+    if (player != null){
+      player.get('boost').boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
+    }
 
   } //onmousemove
 
   //This gets called when the state changes. Menu -> Game
   override function onleave<T>(_:T) {
-    trace('gamestate onleave');
 
     background_scene.empty();
     collision_scene.empty();
     hud_scene.empty();
     level_scene.empty();
+    tower_factory.destroyPools();
 
   } //onleave
 
   //This gets called every tick
   override function update(dt:Float) {
-    Luxe.camera.center.x = player.pos.x;
-    Luxe.camera.center.y = player.pos.y;
+    if (player != null){
+      Luxe.camera.center.x = player.pos.x;
+      Luxe.camera.center.y = player.pos.y;
+    }
 
     Luxe.camera.zoom = 1;// - (zoomfactor.lengthsq * 0.00000025);
   }
@@ -109,22 +114,51 @@ class GameState extends luxe.States.State {
   private function buildLevel(){
     switch level_name{
     case 'level1':
+
+      player = tower_factory.createTower(new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_red-01.png");
+      tower_factory.setTowerLevelAttributes(player);
+      tower_factory.setTowerStats(player, 400, 310, 140000, 1500, 200, -150);
+
       background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
 
-      for(i in 0...1){
-        tower_factory.createYellowOre(new Vector(Luxe.screen.mid.x+(Math.random()*200) + 100, Luxe.screen.mid.y+(Math.random()*400) + 0), 'rock1'+i);
+      var dude = tower_factory.createTower(new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
+      tower_factory.setTowerLevelAttributes(dude);
+      tower_factory.setTowerStats(dude, 100, 360, 140000, 1500, 250, 150);
+
+      for(i in 0...40){
+        var pushable = tower_factory.createPushable(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
+        pushable.get('friction').setup(100);
+        tower_factory.setPushableAppearance(pushable,"yellow_ore-01.png");
+
       };
       tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
 
-
     case 'level2':
+
+      player = tower_factory.createTower(new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy-01.png");
+      tower_factory.setTowerLevelAttributes(player);
+      tower_factory.setTowerStats(player, 400, 310, 140000, 1500, 150, 350);
+
+
+      var dude = tower_factory.createTower(new Vector(Luxe.screen.mid.x - 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
+      tower_factory.setTowerLevelAttributes(dude);
+      tower_factory.setTowerStats(dude, 100, 360, 140000, 1500, 250, 150);
+
+      var dude1 = tower_factory.createTower(new Vector(Luxe.screen.mid.x + 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
+      tower_factory.setTowerLevelAttributes(dude1);
+      tower_factory.setTowerStats(dude1, 100, 360, 140000, 1500, 250, 150);
+
+      var dude2 = tower_factory.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), "metal_guy_green-01.png");
+      tower_factory.setTowerLevelAttributes(dude2);
+      tower_factory.setTowerStats(dude2, 100, 360, 140000, 1500, 250, 150);
+
+
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-
-      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x - 150, Luxe.screen.mid.y-400), "dude1");
-      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x + 150, Luxe.screen.mid.y-400), "dude2");
-
       for(i in 0...40){
-        tower_factory.createYellowOre(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200), 'rock1'+i);
+        var pushable = tower_factory.createPushable(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
+        pushable.get('friction').setup(100);
+        tower_factory.setPushableAppearance(pushable,"yellow_ore-01.png");
+
       };
     }
   }

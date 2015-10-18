@@ -14,12 +14,10 @@ class AccelerationComponent extends Component {
   public var acceleration : Vector;
 
   public function new(json:Dynamic){
-    trace('new');
     super(json);
     acceleration = new Vector(0,0);
   }
   override function init() {
-    trace('init');
     tower = cast entity;
     movement = cast get('movement');
 
@@ -36,7 +34,6 @@ class AccelerationComponent extends Component {
   } //update
 
   public function setup(top_s:Float) {
-    trace('setup');
 
   } //init
 

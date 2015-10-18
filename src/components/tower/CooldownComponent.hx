@@ -16,7 +16,6 @@ class CooldownComponent extends Component {
   private var tower : Visual;
 
   override function init() {
-    trace('init');
     max_cooldown = 100;
     cooldown = 100;
     ready = true;

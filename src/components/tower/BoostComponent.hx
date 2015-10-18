@@ -15,7 +15,6 @@ class BoostComponent extends Component {
   public var close_enough_to_destination : Float;
   public var max_fuel : Float;
   public var fuel : Float;
-  public var top_speed: Float;
   public var fuel_recharge : Float;
   private var cooldown : CooldownComponent;
   private var acceleration_comp : AccelerationComponent;
@@ -30,7 +29,6 @@ class BoostComponent extends Component {
   }
 
   override function init() {
-    trace('init');
     boosting = false;
 
     boost_vector.x = 0;
@@ -59,7 +57,7 @@ class BoostComponent extends Component {
         fuel = 0;
         boostOff();
       }
-      
+
       if (Vector.Subtract(destination,tower.pos).length < close_enough_to_destination){
         boostOff();
       }
@@ -74,13 +72,13 @@ class BoostComponent extends Component {
 
   } //update
 
-  public function setup(boostPower:Float, topSpeed: Float, maxFuel: Float, fuelRecharge:Float) {
+  public function setup(boostPower:Float, maxFuel: Float, fuelRecharge:Float) {
     trace('setup');
     boost_power = boostPower;
     max_fuel = maxFuel;
     fuel = max_fuel;
     fuel_recharge = fuelRecharge;
-    top_speed = topSpeed;
+
   } //init
 
   public function boostOn(dest:Vector, closeEnough:Float){

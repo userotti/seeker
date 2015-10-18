@@ -21,7 +21,9 @@ class ForceIndicatorManager extends Component {
   }
 
   override function init() {
+
     indicator = cast entity;
+    indicator.visible = false;
     parent = cast (indicator.parent, Sprite);
     force_body = parent.get('forcebody');
 

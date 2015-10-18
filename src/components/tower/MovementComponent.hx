@@ -14,12 +14,10 @@ class MovementComponent extends Component {
 
 
   public function new(json:Dynamic){
-    trace('new');
     super(json);
     velocity = new Vector(0,0);
   }
   override function init() {
-    trace('init');
     tower = cast entity;
     velocity.x = 0;
     velocity.y = 0;

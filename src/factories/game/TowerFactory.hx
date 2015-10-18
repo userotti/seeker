@@ -21,16 +21,31 @@ import components.tower.ForceManagerComponent;
 import components.utility.ForceIndicatorManager;
 
 import components.tower.AppearanceComponent;
+import luxe.structural.Pool;
 
 //This class creates new Sprites and Entities and their components and adds them the scene they got from the state they're a member of.
 class TowerFactory {
 
   private var scene : Scene;
   private var force_manager : ForceManagerComponent;
+  private var tower_pool: Pool<Sprite>;
+  private var pushable_pool: Pool<Sprite>;
+
 
   public function new(_scene:Scene) {
     scene = _scene;
     force_manager = new ForceManagerComponent({name: 'force_manager'}, scene);
+  }
+
+  public function setupPools(_tower_pool_size: Int, _pushable_pool_size: Int){
+    tower_pool = new Pool<Sprite>(_tower_pool_size, buildTower);
+    pushable_pool = new Pool<Sprite>(_pushable_pool_size, buildPushable);
+
+  }
+
+  public function destroyPools(){
+    tower_pool = null;
+    pushable_pool = null;
   }
 
   public function createMetalNest (pos:Vector, name:String) : Visual{
@@ -63,18 +78,43 @@ class TowerFactory {
 
   }
 
+  public function kill(_tower:Sprite){
 
-  public function createTower (pos:Vector, name:String) : Visual{
+    _tower.active = false;
+    _tower.visible = false;
+    _tower.scene = null;
+    scene.remove(_tower);
+
+  }
+
+  //TOWERS =================================================
+  public function createTower(_pos:Vector, _texture:String){
+
+    var fresh_tower = tower_pool.get();
+
+    var indicator_component = fresh_tower.get('forceindicator', true);
+    indicator_component.init();
+    indicator_component.indicator.active = true;
+
+    fresh_tower.init();
+    fresh_tower.pos = _pos;
+    fresh_tower.active = true;
+    fresh_tower.visible = true;
+    setTowerAppearance(fresh_tower, _texture);
+
+    return fresh_tower;
+
+  }
+
+  public function buildTower (index: Int, total: Int) : Sprite{
     var tower = new luxe.Sprite({
-      name: name,
-      pos: new Vector(pos.x,pos.y),
-      visible: true,
+      name: 'tower' + index,
       scene: scene,
-      batcher: Luxe.renderer.batcher
+      batcher: Luxe.renderer.batcher,
     });
 
-    // tower.transform.origin.x = Luxe.resources.texture("assets/images/rasters/metal_guy_green-01.png").width/2;
-    // tower.transform.origin.y = Luxe.resources.texture("assets/images/rasters/metal_guy_green-01.png").height/2;
+    tower.active = false;
+    tower.visible = false;
 
     // The order of these components are very important
     // Stand alone
@@ -89,90 +129,120 @@ class TowerFactory {
     tower.add(new BoostComponent({ name: 'boost' }));
     //needs boost
     tower.add(new AppearanceComponent({ name: 'appearance' }));
-
     tower.add(force_manager);
-    //needs a force manager
+    //needs a force manager //Askes the force manager to push him around.
     tower.add(new ForceBodyComponent({ name: 'forcebody' }));
-
     //doesnt need a forcemanager
     tower.add(new ForceFieldComponent({ name: 'forcefield' }));
 
-
-
-    tower.depth = 9;
-
-    var wa = Luxe.resources.texture("assets/images/rasters/metal_guy-01.png").width_actual;
-    var w = Luxe.resources.texture("assets/images/rasters/metal_guy-01.png").width;
-
-    tower.size = new Vector(wa,wa);
-    tower.origin = new Vector(w/2,w/2);
-    tower.texture = Luxe.resources.texture("assets/images/rasters/metal_guy-01.png");
-
-    tower.get('cooldown').setup(4.8);
-    tower.get('friction').setup(50);
-    tower.get('break').setup(500);
-    tower.get('boost').setup(560, 270, 40000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
-    tower.get('forcefield').setup(150, 250);//radius, constant_force
-
-
     var force_indicator = new Sprite({
-      name: "_force_indicator",
+      name: 'force_indicator',
       depth: 12,
       pos: new Vector(32.5,32.5), //the parent (w/2, w/2)
       origin: new Vector(50,15), // (distance from the center, indicator w/2)
-      visible: true,
-      texture : Luxe.resources.texture("assets/images/rasters/force_indicator-01.png"),
+      texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
       parent: tower,
       scene: scene,
       batcher: Luxe.renderer.batcher
     });
+
+    force_indicator.active = false;
+    force_indicator.visible = false;
     //needs a force body
     force_indicator.add(new ForceIndicatorManager({name: 'forceindicator'}));
-
 
     return tower;
   }
 
+  public function setTowerAppearance(_tower : Sprite, _texture: String){
 
-  public function createYellowOre (pos:Vector, name:String) : Visual{
-    var ore = new luxe.Sprite({
-      name: name,
-      pos: new Vector(pos.x,pos.y),
-      visible: true,
+    _tower.depth = 9;
+    var wa = Luxe.resources.texture("assets/images/rasters/"+_texture).width_actual;
+    var w = Luxe.resources.texture("assets/images/rasters/"+_texture).width;
+    _tower.size = new Vector(wa,wa);
+    _tower.origin = new Vector(w/2,w/2);
+    _tower.texture = Luxe.resources.texture("assets/images/rasters/"+_texture);
+
+  }
+  public function setTowerLevelAttributes(_tower : Sprite){
+    _tower.get('cooldown').setup(4.8);
+    _tower.get('friction').setup(50);
+  }
+
+  public function setTowerStats(_tower : Sprite, _break: Float, _boostpower:Float, _maxFuel:Float, _fuelRecharge:Float, _forceFieldRadius: Float, _forceFieldForce: Float){
+
+    _tower.get('break').setup(_break);
+    _tower.get('boost').setup(_boostpower, _maxFuel, _fuelRecharge); //boostpower, top_speed, max_fuel, fuel_recharge
+    _tower.get('forcefield').setup(_forceFieldRadius, _forceFieldForce);//radius, constant_force
+
+  }
+
+  //PUSAHBLES ===========================================
+  public function buildPushable (index: Int, total: Int){
+    var pushable = new luxe.Sprite({
+      name: 'pushable'+index,
       depth: 7,
-      rotation_z: Math.random()*360,
       scene: scene,
-      texture : Luxe.resources.texture("assets/images/rasters/yellow_ore-01.png"),
       batcher: Luxe.renderer.batcher
     });
 
-    ore.add(new MovementComponent({ name: 'movement' }));
+    pushable.active = false;
+    pushable.visible = false;
+
+    pushable.add(new MovementComponent({ name: 'movement' }));
     //needs movement component
-    ore.add(new AccelerationComponent({ name: 'acceleration' }));
+    pushable.add(new AccelerationComponent({ name: 'acceleration' }));
     //needs movement component and Acceleration Componenets
-    ore.add(new FrictionComponent({ name: 'friction' }));
-    ore.add(force_manager);
+    pushable.add(new FrictionComponent({ name: 'friction' }));
+    pushable.add(force_manager);
     //needs a force manager
-    ore.add(new ForceBodyComponent({ name: 'forcebody' }));
+    pushable.add(new ForceBodyComponent({ name: 'forcebody' }));
 
     //chird of the ore
     var force_indicator = new Sprite({
-      name: "_force_indicator",
+      name: 'force_indicator',
       depth: 12,
       pos: new Vector(15,15),
       origin: new Vector(25+15,0+15),
-      visible: true,
-      texture : Luxe.resources.texture("assets/images/rasters/force_indicator-01.png"),
-      parent: ore,
+      parent: pushable,
       scene: scene,
+      texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
       batcher: Luxe.renderer.batcher
     });
+
+    force_indicator.active = false;
+    force_indicator.visible = false;
     //needs a force body
     force_indicator.add(new ForceIndicatorManager({name: 'forceindicator'}));
 
-    ore.get('friction').setup(100);
+    return pushable;
+  }
 
-    return ore;
+  public function createPushable (_pos:Vector) : Sprite{
+
+    var fresh_pushable = pushable_pool.get();
+    var indicator_component = fresh_pushable.get('forceindicator', true);
+    indicator_component.init();
+    indicator_component.indicator.active = true;
+
+    fresh_pushable.init();
+    fresh_pushable.pos = _pos;
+    fresh_pushable.active = true;
+    fresh_pushable.visible = true;
+
+    return fresh_pushable;
+
+  }
+
+  public function setPushableAppearance(_pushable : Sprite, _texture: String){
+
+    _pushable.depth = 9;
+    _pushable.rotation_z = Math.random()*360;
+    var wa = Luxe.resources.texture("assets/images/rasters/"+_texture).width_actual;
+    var w = Luxe.resources.texture("assets/images/rasters/"+_texture).width;
+    _pushable.size = new Vector(wa,wa);
+    _pushable.origin = new Vector(w/2,w/2);
+    _pushable.texture = Luxe.resources.texture("assets/images/rasters/"+_texture);
 
   }
 
