@@ -67,10 +67,8 @@ class Main extends luxe.Game {
     config.preload.textures.push({ id:'assets/images/rasters/force_indicator-01.png' }); //30 x 7?
     config.preload.textures.push({ id:'assets/images/rasters/smoke_triangle-01.png' }); //30 x 7?
 
-
-
     config.preload.fonts.push({ id:'assets/fonts/basicfont/font.fnt' });
-    config.render.antialiasing = 1;
+    config.render.antialiasing = 0;
     return config;
   } //config 
 

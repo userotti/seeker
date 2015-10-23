@@ -14,6 +14,7 @@ class BreakComponent extends Component {
   private var movement : MovementComponent;
   private var tower : Visual;
 
+  private var utility_float : Float;
   private var utility_vector : Vector;
 
   public function new(json:Dynamic){
@@ -29,17 +30,27 @@ class BreakComponent extends Component {
   } //init
 
   override function update(dt:Float) {
-    if ((breaking == true) && (movement.velocity.x != 0) && (movement.velocity.y != 0)){
-      utility_vector.x = 0;
-      utility_vector.y = 0;
+    if (breaking == true){
+      if ((movement.velocity.x != 0) || (movement.velocity.y != 0)){
+        utility_vector.x = 0;
+        utility_vector.y = 0;
 
-      utility_vector.x = movement.velocity.x * -1;
-      utility_vector.y = movement.velocity.y * -1;
+        utility_vector.x = movement.velocity.x * -1;
+        utility_vector.y = movement.velocity.y * -1;
 
-      utility_vector.normalize();
-      utility_vector.multiplyScalar(break_friction_power);
+        utility_vector.normalize();
 
-      acceleration.acceleration.add(utility_vector);
+
+        //Crappy hack
+        utility_float = movement.velocity.lengthsq;
+        if (Math.pow(break_friction_power,2) < utility_float){
+           utility_vector.multiplyScalar(break_friction_power);
+        }else{
+           utility_vector.multiplyScalar(Math.sqrt(utility_float));
+        }
+
+        acceleration.acceleration.add(utility_vector);
+      }
     }
   } //update
 

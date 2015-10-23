@@ -4,6 +4,7 @@ import luxe.Component;
 import luxe.Vector;
 import luxe.Sprite;
 import luxe.Visual;
+import factories.game.TowerFactory;
 
 
 class BoostComponent extends Component {
@@ -16,10 +17,14 @@ class BoostComponent extends Component {
   public var max_fuel : Float;
   public var fuel : Float;
   public var fuel_recharge : Float;
+  public var tower_factory_reference: TowerFactory;
+
   private var cooldown : CooldownComponent;
   private var acceleration_comp : AccelerationComponent;
   private var breaks : BreakComponent;
   private var tower : Visual;
+  private var boost_smoke_counter : Float;
+
 
 
 
@@ -33,6 +38,8 @@ class BoostComponent extends Component {
 
     boost_vector.x = 0;
     boost_vector.y = 0;
+
+    boost_smoke_counter = 0;
 
     tower = cast entity;
     cooldown = cast get('cooldown');
@@ -50,6 +57,11 @@ class BoostComponent extends Component {
       boost_vector.normalize();
       boost_vector.multiplyScalar(boost_power);
       acceleration_comp.acceleration.add(boost_vector);
+
+      boost_smoke_counter++;
+      // if (boost_smoke_counter % 4 == 0){
+      //   tower_factory_reference.createFloater(new Vector(tower.pos.x, tower.pos.y), new Vector((Math.random()-Math.random())*60,(Math.random()-Math.random())*60), 0.5, "smoke_triangle-01.png");
+      // }
 
       if (fuel > boost_power){
         fuel -= boost_power;

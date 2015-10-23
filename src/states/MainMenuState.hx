@@ -61,6 +61,13 @@ class MainMenuState extends luxe.States.State {
 
     });
 
+    var mint_btn = menu_factory.createButton('level3', 15, Luxe.screen.mid.x, 430, 150, 50);
+    mint_btn.onmousedown.listen(function(e,c){
+      Main.game_state.setLevel('level3');
+      Main.states.set('gamestate');
+
+    });
+
 
   } //onenter
 

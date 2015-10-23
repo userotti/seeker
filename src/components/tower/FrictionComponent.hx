@@ -14,6 +14,7 @@ class FrictionComponent extends Component {
   private var movement : MovementComponent;
   private var tower : Visual;
 
+  private var utility_float: Float;
   private var utility_vector : Vector;
 
   public function new(json:Dynamic){
@@ -28,15 +29,28 @@ class FrictionComponent extends Component {
   } //init
 
   override function update(dt:Float) {
-    if ((movement.velocity.x != 0) && (movement.velocity.y != 0)){
+
+
+    if ((movement.velocity.x != 0) || (movement.velocity.y != 0)){
       utility_vector.x = 0;
       utility_vector.y = 0;
+
 
       utility_vector.x = movement.velocity.x * -1;
       utility_vector.y = movement.velocity.y * -1;
 
       utility_vector.normalize();
-      utility_vector.multiplyScalar(friction_power);
+
+      //Crappy hack
+      utility_float = movement.velocity.lengthsq;
+      if (Math.pow(friction_power,2) < utility_float){
+         utility_vector.multiplyScalar(friction_power);
+      }else{
+         utility_vector.multiplyScalar(Math.sqrt(utility_float));
+      }
+
+
+
 
       acceleration.acceleration.add(utility_vector);
     }

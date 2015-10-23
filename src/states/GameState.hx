@@ -42,7 +42,7 @@ class GameState extends luxe.States.State {
     trace('new');
     super(json);
 
-    level_name = 'level1';
+    level_name = '';
     background_scene = new Scene('background_scene');
     collision_scene = new Scene('collision_scene');
     level_scene = new Scene('level_scene');
@@ -68,7 +68,7 @@ class GameState extends luxe.States.State {
   //When you land on this state. This function gets called, (everytime a new game starts).
   override function onenter<T>(_:T) {
 
-    tower_factory.setupPools(10, 100); //tower,
+    tower_factory.setupPools(10, 100, 10, 50); //tower,pushable, static tower
 
     //Build the level
     buildLevel();
@@ -131,7 +131,9 @@ class GameState extends luxe.States.State {
         tower_factory.setPushableAppearance(pushable,"yellow_ore-01.png");
 
       };
-      tower_factory.createMetalNest(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "dude");
+
+      var metal_nest = tower_factory.createStaticTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "metal_nest-01.png");
+      tower_factory.setStaticTowerStats(metal_nest,200,200);
 
     case 'level2':
 
@@ -160,7 +162,27 @@ class GameState extends luxe.States.State {
         tower_factory.setPushableAppearance(pushable,"yellow_ore-01.png");
 
       };
+
+    case 'level3':
+
+      player = tower_factory.createTower(new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_green-01.png");
+      tower_factory.setTowerLevelAttributes(player);
+      tower_factory.setTowerStats(player, 400, 310, 140000, 1500, 200, 150);
+
+      background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
+
+
+      for(i in 0...40){
+        var pushable = tower_factory.createPushable(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
+        pushable.get('friction').setup(100);
+        tower_factory.setPushableAppearance(pushable,"yellow_ore-01.png");
+
+      };
+
+      var metal_nest = tower_factory.createStaticTower(new Vector(Luxe.screen.mid.x-200, Luxe.screen.mid.y-400), "metal_nest-01.png");
+      tower_factory.setStaticTowerStats(metal_nest,200,200);
     }
+
   }
 
 }
