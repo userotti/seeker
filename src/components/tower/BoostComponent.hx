@@ -81,7 +81,6 @@ class BoostComponent extends Component {
   } //update
 
   public function setup(boostPower:Float, maxFuel: Float, fuelRecharge:Float) {
-    trace('setup');
     boost_power = boostPower;
     max_fuel = maxFuel;
     fuel = max_fuel;
@@ -90,7 +89,6 @@ class BoostComponent extends Component {
   } //init
 
   public function boostOn(dest:Vector, closeEnough:Float){
-    trace('boostOn');
     if (cooldown.ready == true){
       destination = dest;
       close_enough_to_destination = closeEnough;

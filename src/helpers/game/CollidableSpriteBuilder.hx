@@ -17,7 +17,6 @@ import components.tower.BreakComponent;
 import components.tower.CooldownComponent;
 import components.tower.ForceBodyComponent;
 import components.tower.ForceFieldComponent;
-import components.tower.ForceManagerComponent;
 
 import components.tower.TimedKillComponent;
 import components.utility.ForceIndicatorManager;
@@ -29,23 +28,19 @@ import helpers.game.CollisionSceneManager;
 //This class creates new Sprites and Entities and their components and adds them the scene they got from the state they're a member of.
 class CollidableSpriteBuilder {
 
-  private var scene_manager : CollisionSceneManager;
 
-  public function new(_sceneManager:CollisionSceneManager) {
-    scene_manager = _sceneManager;
+  public function new() {
+
   }
 
   //STATIC TOWERS ===================================================
-  public function createStaticTower (_pos:Vector, _texture:String){
+  public function setStaticTower (_static_tower:Sprite, _pos:Vector, _texture:String){
 
-    var static_tower = scene_manager.static_tower_pool.get();
-    static_tower.init();
-    static_tower.visible = true;
-    static_tower.active = true;
-    static_tower.pos = new Vector(_pos.x,_pos.y);
-    setStaticTowerAppearance(static_tower, _texture);
-
-    return static_tower;
+    _static_tower.init();
+    _static_tower.visible = true;
+    _static_tower.active = true;
+    _static_tower.pos = new Vector(_pos.x,_pos.y);
+    setStaticTowerAppearance(_static_tower, _texture);
 
   }
 
@@ -60,26 +55,23 @@ class CollidableSpriteBuilder {
 
   }
 
-  public function setStaticTowerStats(_tower : Sprite, _forceFieldRadius: Float, _forceFieldForce: Float){
+  public function setStaticTowerStats(_static_tower : Sprite, _forceFieldRadius: Float, _forceFieldForce: Float){
 
-    _tower.get('forcefield').setup(_forceFieldRadius, _forceFieldForce);//radius, constant_force
+    _static_tower.get('forcefield_collisionbox').setup(_forceFieldRadius, _forceFieldForce);//radius, constant_force
 
   }
 
   //TOWERS =================================================
-  public function createTower(_pos:Vector, _texture:String){
+  public function setTower(_tower:Sprite, _pos:Vector, _texture:String){
 
-    var tower = scene_manager.tower_pool.get();
-    var indicator_component = tower.get('forceindicator', true);
+    var indicator_component = _tower.get('forceindicator', true);
     indicator_component.init();
     indicator_component.indicator.active = true;
-    tower.init();
-    tower.pos = _pos;
-    tower.active = true;
-    tower.visible = true;
-    setTowerAppearance(tower, _texture);
-
-    return tower;
+    _tower.init();
+    _tower.pos = _pos;
+    _tower.active = true;
+    _tower.visible = true;
+    setTowerAppearance(_tower, _texture);
 
   }
 
@@ -105,23 +97,20 @@ class CollidableSpriteBuilder {
 
     _tower.get('break').setup(_break);
     _tower.get('boost').setup(_boostpower, _maxFuel, _fuelRecharge); //boostpower, top_speed, max_fuel, fuel_recharge
-    _tower.get('forcefield').setup(_forceFieldRadius, _forceFieldForce);//radius, constant_force
+    _tower.get('forcefield_collisionbox').setup(_forceFieldRadius, _forceFieldForce);//radius, constant_force
 
   }
 
   //PUSAHBLES ===========================================
-  public function createPushable (_pos:Vector) : Sprite{
+  public function setPushable (_pushable : Sprite, _pos:Vector){
 
-    var fresh_pushable = scene_manager.pushable_pool.get();
-    var indicator_component = fresh_pushable.get('forceindicator', true);
+    var indicator_component = _pushable.get('forceindicator', true);
     indicator_component.init();
     indicator_component.indicator.active = true;
-    fresh_pushable.init();
-    fresh_pushable.pos = _pos;
-    fresh_pushable.active = true;
-    fresh_pushable.visible = true;
-
-    return fresh_pushable;
+    _pushable.init();
+    _pushable.pos = _pos;
+    _pushable.active = true;
+    _pushable.visible = true;
 
   }
 

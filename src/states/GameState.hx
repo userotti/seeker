@@ -25,8 +25,13 @@ class GameState extends luxe.States.State {
 
   private var level_name : String;
 
+  //builders
+  public var collidable_sprite_builder : CollidableSpriteBuilder;
+
+
   private var collison_scene_manager : CollisionSceneManager;
   private var effect_scene_manager : EffectsSceneManager;
+
 
 
   private var background_scene : Scene;
@@ -41,6 +46,8 @@ class GameState extends luxe.States.State {
     super(json);
 
     level_name = '';
+
+    collidable_sprite_builder = new CollidableSpriteBuilder();
 
     effect_scene_manager = new EffectsSceneManager();
     collison_scene_manager = new CollisionSceneManager(effect_scene_manager.effect_sprite_builder);
@@ -77,6 +84,12 @@ class GameState extends luxe.States.State {
       player.get('boost').boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
     }
 
+    // trace("player.pos.x: " + player.pos.x);
+    // trace("player.pos.y: " + player.pos.y);
+    // trace("collision tree: " + collison_scene_manager.collision_tree_manager.collision_tree);
+    //
+
+
   } //onmousemove
 
   //This gets called when the state changes. Menu -> Game
@@ -94,6 +107,8 @@ class GameState extends luxe.States.State {
 
   //This gets called every tick
   override function update(dt:Float) {
+
+    collison_scene_manager.updateCollisionTree(dt);
     if (player != null){
       Luxe.camera.center.x = player.pos.x;
       Luxe.camera.center.y = player.pos.y;
@@ -106,59 +121,68 @@ class GameState extends luxe.States.State {
   private function buildLevel(){
 
     //Collidable Builder
-    var cb = collison_scene_manager.collidable_sprite_builder;
+    var cb = collidable_sprite_builder;
 
     collison_scene_manager.setupStaticTowerPool(10);
     collison_scene_manager.setupTowerPool(10);
-    collison_scene_manager.setupPushablePool(40);
+    collison_scene_manager.setupPushablePool(250);
 
     switch level_name{
 
     case 'level1':
 
-      player = cb.createTower(new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_red-01.png");
+      player = collison_scene_manager.getTower();
+      cb.setTower(player,new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_red-01.png");
       cb.setTowerLevelAttributes(player);
       cb.setTowerStats(player, 400, 310, 140000, 1500, 200, -150);
 
       background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
 
-      var dude = cb.createTower(new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
+      var dude = collison_scene_manager.getTower();
+      cb.setTower(dude, new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
       cb.setTowerLevelAttributes(dude);
       cb.setTowerStats(dude, 100, 360, 140000, 1500, 250, 150);
 
-      for(i in 0...40){
-        var pushable = cb.createPushable(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
+      for(i in 0...4){
+        var pushable = collison_scene_manager.getPushable();
+        cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
         pushable.get('friction').setup(100);
         cb.setPushableAppearance(pushable,"yellow_ore-01.png");
 
       };
 
-      var metal_nest = cb.createStaticTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "metal_nest-01.png");
+      var metal_nest = collison_scene_manager.getStaticTower();
+      cb.setStaticTower(metal_nest,new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "metal_nest-01.png");
       cb.setStaticTowerStats(metal_nest,200,200);
 
     case 'level2':
 
-      player = cb.createTower(new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy-01.png");
+      player = collison_scene_manager.getTower();
+      cb.setTower(player,new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy-01.png");
       cb.setTowerLevelAttributes(player);
       cb.setTowerStats(player, 400, 310, 140000, 1500, 150, 350);
 
 
-      var dude = cb.createTower(new Vector(Luxe.screen.mid.x - 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
+      var dude = collison_scene_manager.getTower();
+      cb.setTower(dude,new Vector(Luxe.screen.mid.x - 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
       cb.setTowerLevelAttributes(dude);
       cb.setTowerStats(dude, 100, 360, 140000, 1500, 250, 150);
 
-      var dude1 = cb.createTower(new Vector(Luxe.screen.mid.x + 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
+      var dude1 = collison_scene_manager.getTower();
+      cb.setTower(dude1, new Vector(Luxe.screen.mid.x + 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
       cb.setTowerLevelAttributes(dude1);
       cb.setTowerStats(dude1, 100, 360, 140000, 1500, 250, 150);
 
-      var dude2 = cb.createTower(new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), "metal_guy_green-01.png");
+      var dude2 = collison_scene_manager.getTower();
+      cb.setTower(dude2,new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), "metal_guy_green-01.png");
       cb.setTowerLevelAttributes(dude2);
       cb.setTowerStats(dude2, 100, 360, 140000, 1500, 250, 150);
 
 
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-      for(i in 0...40){
-        var pushable = cb.createPushable(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
+      for(i in 0...60){
+        var pushable = collison_scene_manager.getPushable();
+        cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
         pushable.get('friction').setup(100);
         cb.setPushableAppearance(pushable,"yellow_ore-01.png");
 
@@ -166,21 +190,24 @@ class GameState extends luxe.States.State {
 
     case 'level3':
 
-      player = cb.createTower(new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_green-01.png");
+      player = collison_scene_manager.getTower();
+      cb.setTower(player,new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_green-01.png");
       cb.setTowerLevelAttributes(player);
       cb.setTowerStats(player, 400, 310, 140000, 1500, 200, 150);
 
       background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
 
 
-      for(i in 0...40){
-        var pushable = cb.createPushable(new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
+      for(i in 0...240){
+        var pushable = collison_scene_manager.getPushable();
+        cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
         pushable.get('friction').setup(100);
         cb.setPushableAppearance(pushable,"yellow_ore-01.png");
 
       };
 
-      var metal_nest = cb.createStaticTower(new Vector(Luxe.screen.mid.x-200, Luxe.screen.mid.y-400), "metal_nest-01.png");
+      var metal_nest = collison_scene_manager.getStaticTower();
+      cb.setStaticTower(metal_nest,new Vector(Luxe.screen.mid.x-200, Luxe.screen.mid.y-400), "metal_nest-01.png");
       cb.setStaticTowerStats(metal_nest,200,200);
     }
 

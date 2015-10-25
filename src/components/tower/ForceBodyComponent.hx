@@ -6,33 +6,39 @@ import luxe.Sprite;
 import luxe.Visual;
 import luxe.Color;
 import luxe.collision.shapes.*;
-import components.tower.ForceManagerComponent;
+import com.elnabo.quadtree.*;
 
-class ForceBodyComponent extends Component {
+class ForceBodyComponent extends Component implements QuadtreeElement {
 
   public var tower : Visual;
   public var radius : Float;
-  private var force_manager : ForceManagerComponent;
   public var total_force : Vector;
   public var total_force_record : Vector;
-    public var being_forced : Bool;
+  public var being_forced : Bool;
+
+  private var bounding_box : Box;
 
   public function new(json:Dynamic){
     super(json);
     total_force = new Vector(0,0);
     total_force_record = new Vector(0,0);
+    bounding_box = new Box(0,0,0,0);
   }
 
   override function init() {
     tower = cast entity;
-    force_manager = cast get('force_manager');
     radius = 1;
+    bounding_box.width = 2;
+    bounding_box.height = 2;
+
 
     //trace('childeren '+tower.get_any('forceindicator', true, true).length);
   } //init
 
   override function update(dt:Float) {
-    force_manager.force(this);
+
+    bounding_box.x = Std.int(tower.pos.x-(bounding_box.width/2));
+    bounding_box.y = Std.int(tower.pos.y-(bounding_box.height/2));
 
     if (being_forced == true){
       total_force_record.x = total_force.x;
@@ -53,6 +59,10 @@ class ForceBodyComponent extends Component {
 
   public function setRadius(_r:Float){
     radius = _r;
+  }
+
+  public function box(){
+    return bounding_box;
   }
 
 

@@ -5,8 +5,6 @@ import luxe.Vector;
 import luxe.Sprite;
 import luxe.Visual;
 import luxe.Color;
-import luxe.collision.shapes.*;
-import components.tower.ForceManagerComponent;
 import components.tower.ForceBodyComponent;
 
 class ForceIndicatorManager extends Component {
@@ -25,7 +23,7 @@ class ForceIndicatorManager extends Component {
     indicator = cast entity;
     indicator.visible = false;
     parent = cast (indicator.parent, Sprite);
-    force_body = parent.get('forcebody');
+    force_body = parent.get('forcebody_collisionbox');
 
   } //init
 

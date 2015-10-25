@@ -6,7 +6,6 @@ import luxe.Sprite;
 import luxe.Visual;
 import luxe.Color;
 import luxe.collision.shapes.*;
-import components.tower.ForceManagerComponent;
 import components.tower.ForceBodyComponent;
 
 class TimedKillComponent extends Component {

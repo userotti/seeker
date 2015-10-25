@@ -17,7 +17,6 @@ import components.tower.BreakComponent;
 import components.tower.CooldownComponent;
 import components.tower.ForceBodyComponent;
 import components.tower.ForceFieldComponent;
-import components.tower.ForceManagerComponent;
 
 import components.tower.TimedKillComponent;
 import components.utility.ForceIndicatorManager;
@@ -25,24 +24,57 @@ import components.tower.AppearanceComponent;
 import luxe.structural.Pool;
 
 import helpers.game.CollidableSpriteBuilder;
+import helpers.game.CollisionTreeManager;
 
 
 class CollisionSceneManager extends Scene {
 
-  private var force_manager : ForceManagerComponent;
+  public var collision_tree_manager : CollisionTreeManager;
 
-  public var collidable_sprite_builder : CollidableSpriteBuilder;
   public var effects_builder : EffectSpriteBuilder;
   public var static_tower_pool: Pool<Sprite>;
   public var tower_pool: Pool<Sprite>;
   public var pushable_pool: Pool<Sprite>;
 
+  public var active_entities : Array<Entity>;
+
   public function new(_effect_sprite_builder:EffectSpriteBuilder) {
     super('collision_scene');
-    force_manager = new ForceManagerComponent({name: 'force_manager'}, this);
-    collidable_sprite_builder = new CollidableSpriteBuilder(this);
     effects_builder = _effect_sprite_builder;
+    collision_tree_manager = new CollisionTreeManager();
+    active_entities = new Array<Entity>();
+  };
+
+  public function updateCollisionTree(_dt:Float){
+    populateActiveEntities();
+    collision_tree_manager.rebuild(active_entities);
+  };
+
+  public function populateActiveEntities(){
+    for (i in 0...active_entities.length){
+      active_entities.pop();
+    }
+
+    for (entity in entities){
+      if(entity.active){
+        active_entities.push(entity);
+      }
+    }
+
   }
+
+
+  public function getStaticTower() : Sprite{
+    return static_tower_pool.get();
+  };
+
+  public function getTower() : Sprite{
+    return tower_pool.get();
+  };
+
+  public function getPushable() : Sprite{
+    return pushable_pool.get();
+  };
 
   //SETUP POOLS ====================================================
   public function setupStaticTowerPool(_static_tower_pool_size: Int){
@@ -68,7 +100,9 @@ class CollisionSceneManager extends Scene {
 
     static_tower.visible = false;
     static_tower.active = false;
-    static_tower.add(new ForceFieldComponent({ name: 'forcefield' }));
+    var force_field = new ForceFieldComponent({ name: 'forcefield_collisionbox' });
+    force_field.collision_tree_manager = this.collision_tree_manager;
+    static_tower.add(force_field);
 
     return static_tower;
   }
@@ -99,11 +133,14 @@ class CollisionSceneManager extends Scene {
     tower.add(boost_component);
     //needs boost
     tower.add(new AppearanceComponent({ name: 'appearance' }));
-    tower.add(force_manager);
+
     //needs a force manager //Askes the force manager to push him around.
-    tower.add(new ForceBodyComponent({ name: 'forcebody' }));
+    tower.add(new ForceBodyComponent({ name: 'forcebody_collisionbox' }));
     //doesnt need a forcemanager
-    tower.add(new ForceFieldComponent({ name: 'forcefield' }));
+    var force_field = new ForceFieldComponent({ name: 'forcefield_collisionbox' });
+    force_field.collision_tree_manager = this.collision_tree_manager;
+    tower.add(force_field);
+
 
     var force_indicator = new Sprite({
       name: 'force_indicator',
@@ -142,9 +179,8 @@ class CollisionSceneManager extends Scene {
     pushable.add(new AccelerationComponent({ name: 'acceleration' }));
     //needs movement component and Acceleration Componenets
     pushable.add(new FrictionComponent({ name: 'friction' }));
-    pushable.add(force_manager);
     //needs a force manager
-    pushable.add(new ForceBodyComponent({ name: 'forcebody' }));
+    pushable.add(new ForceBodyComponent({ name: 'forcebody_collisionbox' }));
 
     //chird of the ore
     var force_indicator = new Sprite({
