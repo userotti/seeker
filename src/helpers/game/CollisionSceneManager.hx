@@ -19,7 +19,7 @@ import components.tower.ForceBodyComponent;
 import components.tower.ForceFieldComponent;
 
 import components.tower.TimedKillComponent;
-import components.utility.ForceIndicatorManager;
+import components.utility.ForceIndicatorComponent;
 import components.tower.AppearanceComponent;
 import luxe.structural.Pool;
 
@@ -100,7 +100,7 @@ class CollisionSceneManager extends Scene {
 
     static_tower.visible = false;
     static_tower.active = false;
-    var force_field = new ForceFieldComponent({ name: 'forcefield_collisionbox' });
+    var force_field = new ForceFieldComponent({ name: ForceFieldComponent.TAG });
     force_field.collision_tree_manager = this.collision_tree_manager;
     static_tower.add(force_field);
 
@@ -120,24 +120,24 @@ class CollisionSceneManager extends Scene {
 
     // The order of these components are very important
     // Stand alone
-    tower.add(new CooldownComponent({ name: 'cooldown' }));
-    tower.add(new MovementComponent({ name: 'movement' }));
+    tower.add(new CooldownComponent({ name: CooldownComponent.TAG }));
+    tower.add(new MovementComponent({ name: MovementComponent.TAG }));
     //needs movement component
-    tower.add(new AccelerationComponent({ name: 'acceleration' }));
+    tower.add(new AccelerationComponent({ name: AccelerationComponent.TAG }));
     //needs movement component and Acceleration Componenets
-    tower.add(new FrictionComponent({ name: 'friction' }));
-    tower.add(new BreakComponent({ name: 'break' }));
+    tower.add(new FrictionComponent({ name: FrictionComponent.TAG }));
+    tower.add(new BreakComponent({ name: BreakComponent.TAG }));
     //needs all of the above
-    var boost_component = new BoostComponent({ name: 'boost' });
+    var boost_component = new BoostComponent({ name: BoostComponent.TAG });
     //needs to be able to create things...
     tower.add(boost_component);
     //needs boost
-    tower.add(new AppearanceComponent({ name: 'appearance' }));
+    tower.add(new AppearanceComponent({ name: AppearanceComponent.TAG }));
 
     //needs a force manager //Askes the force manager to push him around.
-    tower.add(new ForceBodyComponent({ name: 'forcebody_collisionbox' }));
+    tower.add(new ForceBodyComponent({ name: ForceBodyComponent.TAG }));
     //doesnt need a forcemanager
-    var force_field = new ForceFieldComponent({ name: 'forcefield_collisionbox' });
+    var force_field = new ForceFieldComponent({ name: ForceFieldComponent.TAG });
     force_field.collision_tree_manager = this.collision_tree_manager;
     tower.add(force_field);
 
@@ -156,7 +156,7 @@ class CollisionSceneManager extends Scene {
     force_indicator.active = false;
     force_indicator.visible = false;
     //needs a force body
-    force_indicator.add(new ForceIndicatorManager({name: 'forceindicator'}));
+    force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
 
     return tower;
   }
@@ -174,13 +174,13 @@ class CollisionSceneManager extends Scene {
     pushable.active = false;
     pushable.visible = false;
 
-    pushable.add(new MovementComponent({ name: 'movement' }));
+    pushable.add(new MovementComponent({ name: MovementComponent.TAG }));
     //needs movement component
-    pushable.add(new AccelerationComponent({ name: 'acceleration' }));
+    pushable.add(new AccelerationComponent({ name: AccelerationComponent.TAG }));
     //needs movement component and Acceleration Componenets
-    pushable.add(new FrictionComponent({ name: 'friction' }));
+    pushable.add(new FrictionComponent({ name: FrictionComponent.TAG }));
     //needs a force manager
-    pushable.add(new ForceBodyComponent({ name: 'forcebody_collisionbox' }));
+    pushable.add(new ForceBodyComponent({ name: ForceBodyComponent.TAG }));
 
     //chird of the ore
     var force_indicator = new Sprite({
@@ -197,7 +197,7 @@ class CollisionSceneManager extends Scene {
     force_indicator.active = false;
     force_indicator.visible = false;
     //needs a force body
-    force_indicator.add(new ForceIndicatorManager({name: 'forceindicator'}));
+    force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
 
     return pushable;
   }

@@ -10,6 +10,8 @@ import com.elnabo.quadtree.*;
 
 class ForceBodyComponent extends Component implements QuadtreeElement {
 
+  public static var TAG = 'ForceBodyComponent';
+
   public var tower : Visual;
   public var radius : Float;
   public var total_force : Vector;
@@ -43,7 +45,7 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
     if (being_forced == true){
       total_force_record.x = total_force.x;
       total_force_record.y = total_force.y;
-      tower.get('acceleration').acceleration.add(total_force);
+      tower.get(AccelerationComponent.TAG).acceleration.add(total_force);
       total_force.x = 0;
       total_force.y = 0;
       being_forced = false;

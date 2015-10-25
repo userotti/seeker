@@ -8,6 +8,8 @@ import luxe.Visual;
 
 class BreakComponent extends Component {
 
+  public static var TAG = 'BreakComponent';
+
   public var break_friction_power : Float;
   public var breaking : Bool;
   private var acceleration : AccelerationComponent;
@@ -25,8 +27,8 @@ class BreakComponent extends Component {
   override function init() {
     breaking = true;
     tower = cast entity;
-    acceleration = cast get('acceleration');
-    movement = cast get('movement');
+    acceleration = cast get(AccelerationComponent.TAG);
+    movement = cast get(MovementComponent.TAG);
   } //init
 
   override function update(dt:Float) {

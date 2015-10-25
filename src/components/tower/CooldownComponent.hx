@@ -7,11 +7,12 @@ import luxe.Visual;
 
 class CooldownComponent extends Component {
 
+  public static var TAG = 'CooldownComponent';
+
   public var ready : Bool;
   public var max_cooldown : Float;
   public var cooldown : Float;
 
-  private var TAG = 'CooldownComponent';
   private var cooldown_recharge : Float;
   private var tower : Visual;
 

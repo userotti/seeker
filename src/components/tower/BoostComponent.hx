@@ -8,6 +8,8 @@ import luxe.Visual;
 
 class BoostComponent extends Component {
 
+  public static var TAG = 'BoostComponent';
+
   public var boosting : Bool;
   public var boost_vector : Vector;
   public var boost_power : Float;
@@ -40,9 +42,9 @@ class BoostComponent extends Component {
     boost_smoke_counter = 0;
 
     tower = cast entity;
-    cooldown = cast get('cooldown');
-    acceleration_comp = cast get('acceleration');
-    breaks = cast get('break');
+    cooldown = cast get(CooldownComponent.TAG);
+    acceleration_comp = cast get(AccelerationComponent.TAG);
+    breaks = cast get(BreakComponent.TAG);
   } //init
 
   override function update(dt:Float) {
@@ -100,7 +102,6 @@ class BoostComponent extends Component {
   }
 
   public function boostOff(){
-    trace('boostOff');
     breaks.breaking = true;
     boosting = false;
   }

@@ -19,7 +19,7 @@ import components.tower.ForceBodyComponent;
 import components.tower.ForceFieldComponent;
 
 import components.tower.TimedKillComponent;
-import components.utility.ForceIndicatorManager;
+import components.utility.ForceIndicatorComponent;
 import components.tower.AppearanceComponent;
 import luxe.structural.Pool;
 
@@ -53,8 +53,8 @@ class EffectsSceneManager extends Scene {
     floater.active = false;
     floater.visible = false;
 
-    floater.add(new MovementComponent({ name: 'movement' }));
-    floater.add(new TimedKillComponent({ name: 'timedkill' }));
+    floater.add(new MovementComponent({ name: MovementComponent.TAG }));
+    floater.add(new TimedKillComponent({ name: TimedKillComponent.TAG }));
 
     return floater;
   }

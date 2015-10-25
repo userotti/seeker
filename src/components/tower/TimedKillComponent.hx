@@ -10,12 +10,11 @@ import components.tower.ForceBodyComponent;
 
 class TimedKillComponent extends Component {
 
+  public static var TAG = 'TimedKillComponent';
+
   public var sprite : Sprite;
   public var lifetime : Float;
   public var age : Float;
-
-
-
 
   public function new(json:Dynamic){
     super(json);
@@ -25,8 +24,6 @@ class TimedKillComponent extends Component {
     sprite = cast entity;
     lifetime = 0;
     age = 0;
-
-
 
   } //init
 

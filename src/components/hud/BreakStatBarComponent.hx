@@ -41,6 +41,6 @@ class BreakStatBarComponent extends Component {
   } //update
 
   public function setTower(_tower:Entity){
-    break_component = _tower.get('break');
+    break_component = _tower.get(BreakComponent.TAG);
   }
 }

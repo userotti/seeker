@@ -8,7 +8,8 @@ import luxe.Visual;
 
 class AccelerationComponent extends Component {
 
-  private var TAG = 'AccelerationComponent';
+  public static var TAG = 'AccelerationComponent';
+
   private var tower : Visual;
   private var movement : MovementComponent;
   public var acceleration : Vector;
@@ -19,7 +20,7 @@ class AccelerationComponent extends Component {
   }
   override function init() {
     tower = cast entity;
-    movement = cast get('movement');
+    movement = cast get(MovementComponent.TAG);
 
   } //init
 

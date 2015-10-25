@@ -8,6 +8,10 @@ import luxe.Sprite;
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
+import phoenix.geometry.Geometry;
+
+import components.tower.MovementComponent;
+import components.tower.TimedKillComponent;
 
 
 //This class creates new Sprites and Entities and their components and adds them the scene they got from the state they're a member of.
@@ -35,10 +39,10 @@ class EffectSpriteBuilder {
     floater.origin = new Vector(w/2,w/2);
     floater.texture = Luxe.resources.texture("assets/images/rasters/"+_texture);
 
-    floater.get('movement').velocity = _vel;
+    floater.get(MovementComponent.TAG).velocity = _vel;
 
-    floater.get('timedkill').init();
-    floater.get('timedkill').setup(_lifetime);
+    floater.get(TimedKillComponent.TAG).init();
+    floater.get(TimedKillComponent.TAG).setup(_lifetime);
 
     return floater;
 

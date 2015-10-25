@@ -8,6 +8,8 @@ import luxe.Visual;
 
 class FrictionComponent extends Component {
 
+  public static var TAG = 'FrictionComponent';
+
   public var friction : Vector;
   public var friction_power : Float;
   private var acceleration : AccelerationComponent;
@@ -24,21 +26,18 @@ class FrictionComponent extends Component {
   override function init() {
     tower = cast entity;
 
-    acceleration = cast get('acceleration');
-    movement = cast get('movement');
+    acceleration = cast get(AccelerationComponent.TAG);
+    movement = cast get(MovementComponent.TAG);
   } //init
 
   override function update(dt:Float) {
-
 
     if ((movement.velocity.x != 0) || (movement.velocity.y != 0)){
       utility_vector.x = 0;
       utility_vector.y = 0;
 
-
       utility_vector.x = movement.velocity.x * -1;
       utility_vector.y = movement.velocity.y * -1;
-
       utility_vector.normalize();
 
       //Crappy hack
@@ -48,9 +47,6 @@ class FrictionComponent extends Component {
       }else{
          utility_vector.multiplyScalar(Math.sqrt(utility_float));
       }
-
-
-
 
       acceleration.acceleration.add(utility_vector);
     }

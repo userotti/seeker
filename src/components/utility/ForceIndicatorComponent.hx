@@ -7,7 +7,9 @@ import luxe.Visual;
 import luxe.Color;
 import components.tower.ForceBodyComponent;
 
-class ForceIndicatorManager extends Component {
+class ForceIndicatorComponent extends Component {
+
+  public static var TAG = 'ForceIndicatorComponent';
 
   public var indicator : Sprite;
   public var parent : Sprite;
@@ -23,7 +25,7 @@ class ForceIndicatorManager extends Component {
     indicator = cast entity;
     indicator.visible = false;
     parent = cast (indicator.parent, Sprite);
-    force_body = parent.get('forcebody_collisionbox');
+    force_body = parent.get(ForceBodyComponent.TAG);
 
   } //init
 

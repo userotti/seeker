@@ -8,12 +8,14 @@ import luxe.Visual;
 
 class AppearanceComponent extends Component {
 
+  public static var TAG = 'AppearanceComponent';
+
   private var booster : BoostComponent;
   private var tower : Visual;
 
   override function init() {
     tower = cast entity;
-    booster = cast get('boost');
+    booster = cast get(BoostComponent.TAG);
   } //init
 
   override function update(dt:Float) {

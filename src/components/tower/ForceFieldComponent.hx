@@ -15,6 +15,8 @@ import helpers.game.CollisionTreeManager;
 
 class ForceFieldComponent extends Component implements QuadtreeElement{
 
+  public static var TAG = 'ForceFieldComponent';
+
   private var shape : Circle;
   public var radius : Float;
   private var tower : Visual;
@@ -43,14 +45,13 @@ class ForceFieldComponent extends Component implements QuadtreeElement{
 
   override function update(dt:Float) {
 
-
     bounding_box.x = Std.int(tower.pos.x-(bounding_box.width/2));
     bounding_box.y = Std.int(tower.pos.y-(bounding_box.height/2));
 
     my_collisions = (collision_tree_manager.collision_tree.getCollision(this.bounding_box));
     for(collision in my_collisions){
       var component = cast(collision, Component);
-      if ((component.entity.name != this.entity.name) && (component.name == 'forcebody_collisionbox')){
+      if ((component.entity.name != this.entity.name) && (component.name == ForceBodyComponent.TAG)){
         force(cast(component, ForceBodyComponent));
       }
     }
@@ -88,12 +89,10 @@ class ForceFieldComponent extends Component implements QuadtreeElement{
     radius = _r;
     bounding_box.width = Std.int(_r*2);
     bounding_box.height = Std.int(_r*2);
-
   }
 
   public function setForce(_f:Float){
     constant_force = _f;
-
   }
 
   public function box(){

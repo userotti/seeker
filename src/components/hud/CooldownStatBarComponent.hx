@@ -36,6 +36,6 @@ class CooldownStatBarComponent extends Component {
   } //update
 
   public function setTower(_tower:Entity){
-    cooldown_component =  _tower.get('cooldown');
+    cooldown_component =  _tower.get(CooldownComponent.TAG);
   }
 }

@@ -33,6 +33,6 @@ class FuelStatBarComponent extends Component {
   } //update
 
   public function setTower(_tower:Entity){
-    boost_component = _tower.get('boost');
+    boost_component = _tower.get(BoostComponent.TAG);
   }
 }

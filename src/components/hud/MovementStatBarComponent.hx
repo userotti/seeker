@@ -38,7 +38,7 @@ class MovementStatBarComponent extends Component {
 
   public function setTower(_tower:Entity){
     boost_component = _tower.get('boost');
-    movement_component = _tower.get('movement');
+    movement_component = _tower.get(MovementComponent.TAG);
 
   }
 }

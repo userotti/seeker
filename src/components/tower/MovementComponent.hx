@@ -8,7 +8,8 @@ import luxe.Visual;
 
 class MovementComponent extends Component {
 
-  private var TAG = 'AccelerationComponent';
+  public static var TAG = 'MovementComponent';
+
   public var velocity : Vector;
   private var tower : Visual;
 

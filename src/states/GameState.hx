@@ -15,6 +15,10 @@ import luxe.collision.Collision;
 import luxe.collision.shapes.*;
 import luxe.collision.data.*;
 
+import components.tower.FrictionComponent;
+import components.tower.BoostComponent;
+
+
 import helpers.game.*;
 
 class GameState extends luxe.States.State {
@@ -28,11 +32,8 @@ class GameState extends luxe.States.State {
   //builders
   public var collidable_sprite_builder : CollidableSpriteBuilder;
 
-
   private var collison_scene_manager : CollisionSceneManager;
   private var effect_scene_manager : EffectsSceneManager;
-
-
 
   private var background_scene : Scene;
   private var hud_scene : Scene;
@@ -81,7 +82,7 @@ class GameState extends luxe.States.State {
   override function onmousedown( event:MouseEvent ) {
     trace('onmousedown');
     if (player != null){
-      player.get('boost').boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
+      player.get(BoostComponent.TAG).boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
     }
 
     // trace("player.pos.x: " + player.pos.x);
@@ -146,7 +147,7 @@ class GameState extends luxe.States.State {
       for(i in 0...4){
         var pushable = collison_scene_manager.getPushable();
         cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
-        pushable.get('friction').setup(100);
+        pushable.get(FrictionComponent.TAG).setup(100);
         cb.setPushableAppearance(pushable,"yellow_ore-01.png");
 
       };
@@ -183,7 +184,7 @@ class GameState extends luxe.States.State {
       for(i in 0...60){
         var pushable = collison_scene_manager.getPushable();
         cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
-        pushable.get('friction').setup(100);
+        pushable.get(FrictionComponent.TAG).setup(100);
         cb.setPushableAppearance(pushable,"yellow_ore-01.png");
 
       };
@@ -201,7 +202,7 @@ class GameState extends luxe.States.State {
       for(i in 0...240){
         var pushable = collison_scene_manager.getPushable();
         cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
-        pushable.get('friction').setup(100);
+        pushable.get(FrictionComponent.TAG).setup(100);
         cb.setPushableAppearance(pushable,"yellow_ore-01.png");
 
       };
