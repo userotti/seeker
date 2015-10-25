@@ -1,4 +1,4 @@
-package factories.mainmenu;
+package helpers.mainmenu;
 
 import luxe.Vector;
 import luxe.Visual;

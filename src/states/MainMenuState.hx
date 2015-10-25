@@ -20,7 +20,7 @@ import mint.render.luxe.Convert;
 import mint.render.luxe.Label;
 import mint.layout.margins.Margins;
 
-import factories.mainmenu.*;
+import helpers.mainmenu.*;
 
 class MainMenuState extends luxe.States.State {
 

@@ -24,7 +24,8 @@
     build : {
       dependencies : {
         luxe : '*',
-        mint : '*'
+        mint : '*',
+        elnaboquadtree : '*'
       }
     },
 

@@ -8,6 +8,7 @@ import luxe.Scene;
 import luxe.Entity;
 import components.tower.ForceBodyComponent;
 import components.tower.ForceFieldComponent;
+import elnaboquadtree.*;
 
 class ForceManagerComponent extends Component {
 
@@ -40,6 +41,7 @@ class ForceManagerComponent extends Component {
         }
       }
     }
+
   }
 
   public function simpleCollision(_body:ForceBodyComponent, _field: ForceFieldComponent){

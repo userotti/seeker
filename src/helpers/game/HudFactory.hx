@@ -1,4 +1,4 @@
-package factories.game;
+package helpers.game;
 
 import luxe.Vector;
 import luxe.Visual;
