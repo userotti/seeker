@@ -25,7 +25,6 @@ class FrictionComponent extends Component {
   }
   override function init() {
     tower = cast entity;
-
     acceleration = cast get(AccelerationComponent.TAG);
     movement = cast get(MovementComponent.TAG);
   } //init

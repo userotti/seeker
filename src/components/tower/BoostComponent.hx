@@ -34,13 +34,6 @@ class BoostComponent extends Component {
   }
 
   override function init() {
-    boosting = false;
-
-    boost_vector.x = 0;
-    boost_vector.y = 0;
-
-    boost_smoke_counter = 0;
-
     tower = cast entity;
     cooldown = cast get(CooldownComponent.TAG);
     acceleration_comp = cast get(AccelerationComponent.TAG);
@@ -83,6 +76,12 @@ class BoostComponent extends Component {
   } //update
 
   public function setup(boostPower:Float, maxFuel: Float, fuelRecharge:Float) {
+    boosting = false;
+    boost_vector.x = 0;
+    boost_vector.y = 0;
+    boost_smoke_counter = 0;
+
+
     boost_power = boostPower;
     max_fuel = maxFuel;
     fuel = max_fuel;

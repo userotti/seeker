@@ -12,8 +12,8 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
 
   public static var TAG = 'ForceBodyComponent';
 
-  public var tower : Visual;
-  public var radius : Float;
+  public var owner : Sprite;
+  public var hit_radius : Float;
   public var total_force : Vector;
   public var total_force_record : Vector;
   public var being_forced : Bool;
@@ -25,27 +25,25 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
     total_force = new Vector(0,0);
     total_force_record = new Vector(0,0);
     bounding_box = new Box(0,0,0,0);
+    hit_radius = 0;
+
   }
 
   override function init() {
-    tower = cast entity;
-    radius = 1;
-    bounding_box.width = 2;
-    bounding_box.height = 2;
-
-
-    //trace('childeren '+tower.get_any('forceindicator', true, true).length);
+    owner = cast(this.entity, Sprite);
+    bounding_box.x = Std.int(owner.pos.x-(hit_radius));
+    bounding_box.y = Std.int(owner.pos.y-(hit_radius));
   } //init
 
   override function update(dt:Float) {
 
-    bounding_box.x = Std.int(tower.pos.x-(bounding_box.width/2));
-    bounding_box.y = Std.int(tower.pos.y-(bounding_box.height/2));
+    bounding_box.x = Std.int(owner.pos.x-(hit_radius));
+    bounding_box.y = Std.int(owner.pos.y-(hit_radius));
 
     if (being_forced == true){
       total_force_record.x = total_force.x;
       total_force_record.y = total_force.y;
-      tower.get(AccelerationComponent.TAG).acceleration.add(total_force);
+      owner.get(AccelerationComponent.TAG).acceleration.add(total_force);
       total_force.x = 0;
       total_force.y = 0;
       being_forced = false;
@@ -59,8 +57,12 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
 
   } //update
 
-  public function setRadius(_r:Float){
-    radius = _r;
+  public function setup(_hit_radius:Float){
+
+    hit_radius = _hit_radius;
+    bounding_box.width = Std.int(hit_radius*2);
+    bounding_box.height = Std.int(hit_radius*2);
+
   }
 
   public function box(){

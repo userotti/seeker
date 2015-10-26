@@ -9,89 +9,80 @@ import luxe.Sprite;
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
-import components.tower.MovementComponent;
-import components.tower.AccelerationComponent;
-import components.tower.FrictionComponent;
-import components.tower.BoostComponent;
-import components.tower.BreakComponent;
-import components.tower.CooldownComponent;
-import components.tower.ForceBodyComponent;
-import components.tower.ForceFieldComponent;
+import components.tower.*;
 
-import components.tower.TimedKillComponent;
-import components.utility.ForceIndicatorComponent;
-import components.tower.AppearanceComponent;
+import components.utility.*;
 import luxe.structural.Pool;
 
-import helpers.game.CollidableSpriteBuilder;
+import helpers.game.LevelBuilder;
 import helpers.game.CollisionTreeManager;
+import helpers.game.EffectsSceneManager;
 
+import sprites.game.*;
 
 class CollisionSceneManager extends Scene {
 
   public var collision_tree_manager : CollisionTreeManager;
-
-  public var effects_builder : EffectSpriteBuilder;
-  public var static_tower_pool: Pool<Sprite>;
-  public var tower_pool: Pool<Sprite>;
-  public var pushable_pool: Pool<Sprite>;
-
+  public var effects_scene_manager : EffectsSceneManager;
+  public var static_tower_pool : Pool<TextureSprite>;
+  public var tower_pool : Pool<TextureSprite>;
+  public var pushable_pool : Pool<TextureSprite>;
   public var active_entities : Array<Entity>;
 
-  public function new(_effect_sprite_builder:EffectSpriteBuilder) {
+  public function new(_effects_scene_manager:EffectsSceneManager) {
     super('collision_scene');
-    effects_builder = _effect_sprite_builder;
+    effects_scene_manager = _effects_scene_manager;
     collision_tree_manager = new CollisionTreeManager();
     active_entities = new Array<Entity>();
   };
 
-  public function updateCollisionTree(_dt:Float){
-    populateActiveEntities();
-    collision_tree_manager.rebuild(active_entities);
+  public function getStaticTower() : TextureSprite{
+    var st = static_tower_pool.get();
+    st.active = true;
+    st.visible = true;
+    return st;
   };
 
-  public function populateActiveEntities(){
-    for (i in 0...active_entities.length){
-      active_entities.pop();
-    }
+  public function getTower() : TextureSprite{
+    var t = tower_pool.get();
+    t.active = true;
+    t.visible = true;
+    return t;
+  };
 
-    for (entity in entities){
-      if(entity.active){
-        active_entities.push(entity);
-      }
-    }
+  public function getPushable() : TextureSprite{
+    var p = pushable_pool.get();
+    p.active = true;
+    p.visible = true;
+    return p;
+  };
 
+  public function kill(_entity:Sprite){
+    _entity.active = false;
+    _entity.visible = false;
+    collision_tree_manager.removeEntity(_entity);
+
+    for (child in _entity.children){
+      kill(cast(child, Sprite));
+    }
   }
-
-
-  public function getStaticTower() : Sprite{
-    return static_tower_pool.get();
-  };
-
-  public function getTower() : Sprite{
-    return tower_pool.get();
-  };
-
-  public function getPushable() : Sprite{
-    return pushable_pool.get();
-  };
 
   //SETUP POOLS ====================================================
   public function setupStaticTowerPool(_static_tower_pool_size: Int){
-    static_tower_pool = new Pool<Sprite>(_static_tower_pool_size, buildStaticTower);
+    static_tower_pool = new Pool<TextureSprite>(_static_tower_pool_size, buildStaticTower);
   };
 
   public function setupTowerPool(_tower_pool_size: Int){
-    tower_pool = new Pool<Sprite>(_tower_pool_size, buildTower);
+    tower_pool = new Pool<TextureSprite>(_tower_pool_size, buildTower);
   };
 
   public function setupPushablePool(_pushable_pool_size: Int){
-    pushable_pool = new Pool<Sprite>(_pushable_pool_size, buildPushable);
+    pushable_pool = new Pool<TextureSprite>(_pushable_pool_size, buildPushable);
   };
 
   //STATIC TOWERS ===================================================
   public function buildStaticTower(_index:Int, _total:Int){
-    var static_tower = new luxe.Sprite({
+    var static_tower = new TextureSprite({
       name: 'static_tower' + _index,
       scene: this,
       centered: true,
@@ -108,8 +99,8 @@ class CollisionSceneManager extends Scene {
   }
 
   //TOWERS ===================================================
-  public function buildTower (index: Int, total: Int) : Sprite{
-    var tower = new luxe.Sprite({
+  public function buildTower (index: Int, total: Int){
+    var tower = new TextureSprite({
       name: 'tower' + index,
       scene: this,
       batcher: Luxe.renderer.batcher,
@@ -142,21 +133,30 @@ class CollisionSceneManager extends Scene {
     tower.add(force_field);
 
 
-    var force_indicator = new Sprite({
-      name: 'force_indicator',
-      depth: 12,
-      pos: new Vector(32.5,32.5), //the parent (w/2, w/2)
-      origin: new Vector(50,15), // (distance from the center, indicator w/2)
-      texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
-      parent: tower,
-      scene: this,
-      batcher: Luxe.renderer.batcher
-    });
+    var defence = new DefenceComponent({ name: DefenceComponent.TAG }, this);
+    defence.effects_scene_manager = this.effects_scene_manager;
+    tower.add(defence);
 
-    force_indicator.active = false;
-    force_indicator.visible = false;
+    var offence = new OffenceComponent({ name: OffenceComponent.TAG });
+    offence.collision_tree_manager = this.collision_tree_manager;
+    offence.effects_scene_manager = this.effects_scene_manager;
+    tower.add(offence);
+
+    // var force_indicator = new Sprite({
+    //   name: 'force_indicator',
+    //   depth: 12,
+    //   pos: new Vector(32.5,32.5), //the parent (w/2, w/2)
+    //   origin: new Vector(50,15), // (distance from the center, indicator w/2)
+    //   texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
+    //   parent: tower,
+    //   scene: this,
+    //   batcher: Luxe.renderer.batcher
+    // });
+    //
+    // force_indicator.active = false;
+    // force_indicator.visible = false;
     //needs a force body
-    force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
+    //force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
 
     return tower;
   }
@@ -164,7 +164,7 @@ class CollisionSceneManager extends Scene {
   //PUSHABLES ===================================================
   public function buildPushable (index: Int, total: Int){
 
-    var pushable = new luxe.Sprite({
+    var pushable = new TextureSprite({
       name: 'pushable'+index,
       depth: 7,
       scene: this,
@@ -183,21 +183,28 @@ class CollisionSceneManager extends Scene {
     pushable.add(new ForceBodyComponent({ name: ForceBodyComponent.TAG }));
 
     //chird of the ore
-    var force_indicator = new Sprite({
-      name: 'force_indicator',
-      depth: 12,
-      pos: new Vector(15,15),
-      origin: new Vector(25+15,0+15),
-      parent: pushable,
-      scene: this,
-      texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
-      batcher: Luxe.renderer.batcher
-    });
+    // var force_indicator = new Sprite({
+    //   name: 'force_indicator',
+    //   depth: 12,
+    //   pos: new Vector(15,15),
+    //   origin: new Vector(25+15,0+15),
+    //   parent: pushable,
+    //   scene: this,
+    //   texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
+    //   batcher: Luxe.renderer.batcher
+    // });
+    //
+    // force_indicator.active = false;
+    // force_indicator.visible = false;
+    // //needs a force body
+    // force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
 
-    force_indicator.active = false;
-    force_indicator.visible = false;
-    //needs a force body
-    force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
+
+    //force mekaar?
+
+    // var force_field = new ForceFieldComponent({ name: ForceFieldComponent.TAG });
+    // force_field.collision_tree_manager = this.collision_tree_manager;
+    // pushable.add(force_field);
 
     return pushable;
   }
@@ -209,4 +216,22 @@ class CollisionSceneManager extends Scene {
     tower_pool = null;
     pushable_pool = null;
   }
+
+  public function updateCollisionTree(_dt:Float){
+    populateActiveEntities();
+    collision_tree_manager.rebuild(active_entities);
+  };
+
+  public function populateActiveEntities(){
+    for (i in 0...active_entities.length){
+      active_entities.pop();
+    }
+
+    for (entity in entities){
+      if(entity.active){
+        active_entities.push(entity);
+      }
+    }
+  }
+
 }

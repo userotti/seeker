@@ -40,9 +40,8 @@ class EffectSpriteBuilder {
     floater.texture = Luxe.resources.texture("assets/images/rasters/"+_texture);
 
     floater.get(MovementComponent.TAG).velocity = _vel;
-
     floater.get(TimedKillComponent.TAG).init();
-    floater.get(TimedKillComponent.TAG).setup(_lifetime);
+    floater.get(TimedKillComponent.TAG).setup(_lifetime, 0);
 
     return floater;
 

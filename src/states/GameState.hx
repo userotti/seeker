@@ -15,22 +15,23 @@ import luxe.collision.Collision;
 import luxe.collision.shapes.*;
 import luxe.collision.data.*;
 
-import components.tower.FrictionComponent;
-import components.tower.BoostComponent;
+import components.tower.*;
 
 
 import helpers.game.*;
+import sprites.game.*;
+
 
 class GameState extends luxe.States.State {
 
   var mouse : Vector;
   var zoomfactor : Vector;
-  var player : Sprite;
+  var player : TextureSprite;
 
   private var level_name : String;
 
   //builders
-  public var collidable_sprite_builder : CollidableSpriteBuilder;
+  public var level_builder : LevelBuilder;
 
   private var collison_scene_manager : CollisionSceneManager;
   private var effect_scene_manager : EffectsSceneManager;
@@ -48,10 +49,10 @@ class GameState extends luxe.States.State {
 
     level_name = '';
 
-    collidable_sprite_builder = new CollidableSpriteBuilder();
+    level_builder = new LevelBuilder();
 
     effect_scene_manager = new EffectsSceneManager();
-    collison_scene_manager = new CollisionSceneManager(effect_scene_manager.effect_sprite_builder);
+    collison_scene_manager = new CollisionSceneManager(effect_scene_manager);
 
     background_scene = new Scene('background_scene');
     hud_scene = new Scene('hud_scene');
@@ -85,12 +86,6 @@ class GameState extends luxe.States.State {
       player.get(BoostComponent.TAG).boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
     }
 
-    // trace("player.pos.x: " + player.pos.x);
-    // trace("player.pos.y: " + player.pos.y);
-    // trace("collision tree: " + collison_scene_manager.collision_tree_manager.collision_tree);
-    //
-
-
   } //onmousemove
 
   //This gets called when the state changes. Menu -> Game
@@ -122,94 +117,31 @@ class GameState extends luxe.States.State {
   private function buildLevel(){
 
     //Collidable Builder
-    var cb = collidable_sprite_builder;
-
     collison_scene_manager.setupStaticTowerPool(10);
     collison_scene_manager.setupTowerPool(10);
     collison_scene_manager.setupPushablePool(250);
+    effect_scene_manager.setupFloaterPool(100);
 
     switch level_name{
 
     case 'level1':
 
-      player = collison_scene_manager.getTower();
-      cb.setTower(player,new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_red-01.png");
-      cb.setTowerLevelAttributes(player);
-      cb.setTowerStats(player, 400, 310, 140000, 1500, 200, -150);
-
-      background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
-
-      var dude = collison_scene_manager.getTower();
-      cb.setTower(dude, new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
-      cb.setTowerLevelAttributes(dude);
-      cb.setTowerStats(dude, 100, 360, 140000, 1500, 250, 150);
-
-      for(i in 0...4){
-        var pushable = collison_scene_manager.getPushable();
-        cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
-        pushable.get(FrictionComponent.TAG).setup(100);
-        cb.setPushableAppearance(pushable,"yellow_ore-01.png");
-
-      };
-
-      var metal_nest = collison_scene_manager.getStaticTower();
-      cb.setStaticTower(metal_nest,new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y-400), "metal_nest-01.png");
-      cb.setStaticTowerStats(metal_nest,200,200);
-
     case 'level2':
 
       player = collison_scene_manager.getTower();
-      cb.setTower(player,new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy-01.png");
-      cb.setTowerLevelAttributes(player);
-      cb.setTowerStats(player, 400, 310, 140000, 1500, 150, 350);
-
-
-      var dude = collison_scene_manager.getTower();
-      cb.setTower(dude,new Vector(Luxe.screen.mid.x - 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
-      cb.setTowerLevelAttributes(dude);
-      cb.setTowerStats(dude, 100, 360, 140000, 1500, 250, 150);
-
-      var dude1 = collison_scene_manager.getTower();
-      cb.setTower(dude1, new Vector(Luxe.screen.mid.x + 250, Luxe.screen.mid.y-400), "metal_guy_green-01.png");
-      cb.setTowerLevelAttributes(dude1);
-      cb.setTowerStats(dude1, 100, 360, 140000, 1500, 250, 150);
-
-      var dude2 = collison_scene_manager.getTower();
-      cb.setTower(dude2,new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y), "metal_guy_green-01.png");
-      cb.setTowerLevelAttributes(dude2);
-      cb.setTowerStats(dude2, 100, 360, 140000, 1500, 250, 150);
-
-
+      level_builder.makeMinorBlueTriGrunt(player, new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y + 0));
+      level_builder.makeMinorGreenRectGrunt(collison_scene_manager.getTower(), new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y + 0));
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-      for(i in 0...60){
-        var pushable = collison_scene_manager.getPushable();
-        cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
-        pushable.get(FrictionComponent.TAG).setup(100);
-        cb.setPushableAppearance(pushable,"yellow_ore-01.png");
 
-      };
+      level_builder.makeOrePatch(50, 150,150, new Vector(0,0), collison_scene_manager);
+      level_builder.makeOrePatch(50, 200,200, new Vector(550,0), collison_scene_manager);
+      level_builder.makeOrePatch(50, 200,200, new Vector(-300,550), collison_scene_manager);
+
+      level_builder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y));
 
     case 'level3':
 
-      player = collison_scene_manager.getTower();
-      cb.setTower(player,new Vector(Luxe.screen.mid.x+350, Luxe.screen.mid.y), "metal_guy_green-01.png");
-      cb.setTowerLevelAttributes(player);
-      cb.setTowerStats(player, 400, 310, 140000, 1500, 200, 150);
 
-      background_factory.createBackdrop(new Color().rgb(0x0d0c1b));
-
-
-      for(i in 0...240){
-        var pushable = collison_scene_manager.getPushable();
-        cb.setPushable(pushable, new Vector(Luxe.screen.mid.x+(Math.random()*200) + -100, Luxe.screen.mid.y+(Math.random()*100) - 200));
-        pushable.get(FrictionComponent.TAG).setup(100);
-        cb.setPushableAppearance(pushable,"yellow_ore-01.png");
-
-      };
-
-      var metal_nest = collison_scene_manager.getStaticTower();
-      cb.setStaticTower(metal_nest,new Vector(Luxe.screen.mid.x-200, Luxe.screen.mid.y-400), "metal_nest-01.png");
-      cb.setStaticTowerStats(metal_nest,200,200);
     }
 
   }

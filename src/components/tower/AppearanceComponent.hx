@@ -24,6 +24,7 @@ class AppearanceComponent extends Component {
 
   public function setup() {
 
+
   } //init
 
 }

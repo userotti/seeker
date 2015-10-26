@@ -18,13 +18,12 @@ class TimedKillComponent extends Component {
 
   public function new(json:Dynamic){
     super(json);
+    lifetime = 0;
+    age = 0;
   }
 
   override function init() {
     sprite = cast entity;
-    lifetime = 0;
-    age = 0;
-
   } //init
 
   override function update(dt:Float) {
@@ -35,7 +34,10 @@ class TimedKillComponent extends Component {
     }
   } //update
 
-  public function setup(_lifetime: Float){
+  public function setup(_lifetime: Float, _age: Float){
     lifetime = _lifetime;
+    age = _age;
+
+
   }
 }

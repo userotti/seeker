@@ -16,10 +16,17 @@ class CooldownComponent extends Component {
   private var cooldown_recharge : Float;
   private var tower : Visual;
 
-  override function init() {
+
+  public function new(json:Dynamic){
+    super(json);
     max_cooldown = 100;
     cooldown = 100;
     ready = true;
+
+  }
+
+  override function init() {
+
 
   } //init
 

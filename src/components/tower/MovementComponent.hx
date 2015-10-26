@@ -17,12 +17,11 @@ class MovementComponent extends Component {
   public function new(json:Dynamic){
     super(json);
     velocity = new Vector(0,0);
+    velocity.x = 0;
+    velocity.y = 0;
   }
   override function init() {
     tower = cast entity;
-    velocity.x = 0;
-    velocity.y = 0;
-
   } //init
 
   override function update(dt:Float) {

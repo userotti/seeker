@@ -25,7 +25,6 @@ class BreakComponent extends Component {
   }
 
   override function init() {
-    breaking = true;
     tower = cast entity;
     acceleration = cast get(AccelerationComponent.TAG);
     movement = cast get(MovementComponent.TAG);
@@ -57,6 +56,7 @@ class BreakComponent extends Component {
   } //update
 
   public function setup(fric:Float) {
+    breaking = true;
     break_friction_power = fric;
   } //init
 

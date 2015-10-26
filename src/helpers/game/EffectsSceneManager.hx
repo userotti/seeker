@@ -23,8 +23,6 @@ import components.utility.ForceIndicatorComponent;
 import components.tower.AppearanceComponent;
 import luxe.structural.Pool;
 
-import helpers.game.CollidableSpriteBuilder;
-
 
 class EffectsSceneManager extends Scene {
 

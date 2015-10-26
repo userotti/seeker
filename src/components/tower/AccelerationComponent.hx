@@ -13,21 +13,22 @@ class AccelerationComponent extends Component {
   private var tower : Visual;
   private var movement : MovementComponent;
   public var acceleration : Vector;
+  public var mass : Float;
 
   public function new(json:Dynamic){
     super(json);
     acceleration = new Vector(0,0);
+    mass = 1;
   }
   override function init() {
     tower = cast entity;
     movement = cast get(MovementComponent.TAG);
-
   } //init
 
   override function update(dt:Float) {
 
-    movement.velocity.x += (acceleration.x * dt);
-    movement.velocity.y += (acceleration.y * dt);
+    movement.velocity.x += (acceleration.x * dt) / mass;
+    movement.velocity.y += (acceleration.y * dt) / mass;
 
     acceleration.x = 0;
     acceleration.y = 0;
