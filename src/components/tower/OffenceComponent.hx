@@ -10,6 +10,7 @@ import com.elnabo.quadtree.*;
 import helpers.game.CollisionTreeManager;
 import helpers.game.EffectsSceneManager;
 import components.tower.DefenceComponent;
+import helpers.game.EffectBuilder;
 
 class OffenceComponent extends Component implements QuadtreeElement{
 
@@ -17,10 +18,8 @@ class OffenceComponent extends Component implements QuadtreeElement{
 
   public var big_radius : Float;
   public var small_radius : Float;
-
   public var damage : Float;
   public var reload_speed : Float;
-
   public var reload_cooldown : Float;
 
   public var tower : Sprite;
@@ -91,7 +90,7 @@ class OffenceComponent extends Component implements QuadtreeElement{
         body.kap(damage);
         reload_cooldown = 0;
 
-        effects_scene_manager.effect_sprite_builder.createFloater(new Vector(tower.pos.x,tower.pos.y), new Vector(20,-20), 1.5, 'smoke_triangle-01.png');
+        EffectBuilder.makeFloater(effects_scene_manager.getFloater(), new Vector(tower.pos.x,tower.pos.y), new Vector(20,-20), 1.5, 'smoke_triangle-01.png', 6);
 
       }
     };

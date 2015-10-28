@@ -1,4 +1,4 @@
-package components.tower;
+package components.effects;
 
 import luxe.Component;
 import luxe.Vector;
@@ -34,10 +34,8 @@ class TimedKillComponent extends Component {
     }
   } //update
 
-  public function setup(_lifetime: Float, _age: Float){
+  public function setup(_lifetime: Float){
     lifetime = _lifetime;
-    age = _age;
-
-
+    age = 0;
   }
 }

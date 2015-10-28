@@ -9,40 +9,36 @@ import luxe.Sprite;
 
 import phoenix.geometry.Vertex;
 import phoenix.geometry.Geometry;
-import components.tower.MovementComponent;
-import components.tower.AccelerationComponent;
-import components.tower.FrictionComponent;
-import components.tower.BoostComponent;
-import components.tower.BreakComponent;
-import components.tower.CooldownComponent;
-import components.tower.ForceBodyComponent;
-import components.tower.ForceFieldComponent;
-
-import components.tower.TimedKillComponent;
-import components.utility.ForceIndicatorComponent;
+import components.tower.*;
+import components.effects.*;
 import components.tower.AppearanceComponent;
 import luxe.structural.Pool;
 
+import sprites.game.*;
 
 class EffectsSceneManager extends Scene {
 
-  public var effect_sprite_builder : EffectSpriteBuilder;
-  public var floater_pool: Pool<Sprite>;
-
+  public var floater_pool: Pool<TextureSprite>;
 
   public function new() {
     super('effects_scene');
-    effect_sprite_builder = new EffectSpriteBuilder(this);
   }
 
   //FLOATER ====================================================
   public function setupFloaterPool(_floater_pool_size: Int){
-    floater_pool = new Pool<Sprite>(_floater_pool_size, buildFloater);
+    floater_pool = new Pool<TextureSprite>(_floater_pool_size, buildFloater);
   };
+
+  public function getFloater(){
+    var f = floater_pool.get();
+    f.visible = true;
+    f.active = true;
+    return f;
+  }
 
   public function buildFloater (index: Int, total: Int){
 
-    var floater = new luxe.Sprite({
+    var floater = new TextureSprite({
       name: 'floater'+index,
       scene: this,
       batcher: Luxe.renderer.batcher
@@ -50,7 +46,6 @@ class EffectsSceneManager extends Scene {
 
     floater.active = false;
     floater.visible = false;
-
     floater.add(new MovementComponent({ name: MovementComponent.TAG }));
     floater.add(new TimedKillComponent({ name: TimedKillComponent.TAG }));
 

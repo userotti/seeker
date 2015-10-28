@@ -1,4 +1,4 @@
-package components.utility;
+package components.effects;
 
 import luxe.Component;
 import luxe.Vector;

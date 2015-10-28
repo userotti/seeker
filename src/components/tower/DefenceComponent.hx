@@ -9,6 +9,8 @@ import com.elnabo.quadtree.*;
 import helpers.game.CollisionSceneManager;
 import helpers.game.EffectsSceneManager;
 
+import helpers.game.EffectBuilder;
+
 
 class DefenceComponent extends Component implements QuadtreeElement{
 
@@ -48,7 +50,7 @@ class DefenceComponent extends Component implements QuadtreeElement{
     if (hull <= 0){
 
       for(i in 1...50){
-        effects_scene_manager.effect_sprite_builder.createFloater(new Vector(tower.pos.x,tower.pos.y), new Vector((Math.random()*240) - 120,(Math.random()*240) - 120), 1.5, 'smoke_triangle-01.png');
+        EffectBuilder.makeFloater(effects_scene_manager.getFloater(), new Vector(tower.pos.x,tower.pos.y), new Vector((Math.random()*240) - 120,(Math.random()*240) - 120), 1.5, 'smoke_triangle-01.png', 6);
       }
 
       collision_scene_manager.kill(this.tower);

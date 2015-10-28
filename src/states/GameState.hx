@@ -17,7 +17,6 @@ import luxe.collision.data.*;
 
 import components.tower.*;
 
-
 import helpers.game.*;
 import sprites.game.*;
 
@@ -48,8 +47,6 @@ class GameState extends luxe.States.State {
     super(json);
 
     level_name = '';
-
-    level_builder = new LevelBuilder();
 
     effect_scene_manager = new EffectsSceneManager();
     collison_scene_manager = new CollisionSceneManager(effect_scene_manager);
@@ -97,8 +94,6 @@ class GameState extends luxe.States.State {
     background_scene.empty();
     hud_scene.empty();
 
-
-
   } //onleave
 
   //This gets called every tick
@@ -108,6 +103,9 @@ class GameState extends luxe.States.State {
     if (player != null){
       Luxe.camera.center.x = player.pos.x;
       Luxe.camera.center.y = player.pos.y;
+    }else{
+      Luxe.camera.center.x = 0;
+      Luxe.camera.center.y = 0;
     }
 
     Luxe.camera.zoom = 1;// - (zoomfactor.lengthsq * 0.00000025);
@@ -118,26 +116,36 @@ class GameState extends luxe.States.State {
 
     //Collidable Builder
     collison_scene_manager.setupStaticTowerPool(10);
-    collison_scene_manager.setupTowerPool(10);
+    collison_scene_manager.setupTowerPool(20);
     collison_scene_manager.setupPushablePool(250);
     effect_scene_manager.setupFloaterPool(100);
 
     switch level_name{
 
     case 'level1':
+      player = collison_scene_manager.getTower();
+      LevelBuilder.makeMinorBlueTriGrunt(player, new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y + 0));
 
+      for(i in 1...10){
+        LevelBuilder.makeMinorRedHexGrunt(collison_scene_manager.getTower(), new Vector(Math.random(), Math.random()));
+      }
+
+      background_factory.createBackdrop(new Color().rgb(0x071c16));
+      
     case 'level2':
 
       player = collison_scene_manager.getTower();
-      level_builder.makeMinorBlueTriGrunt(player, new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y + 0));
-      level_builder.makeMinorGreenRectGrunt(collison_scene_manager.getTower(), new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y + 0));
+      LevelBuilder.makeMinorBlueTriGrunt(player, new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y + 0));
+
+      LevelBuilder.makeMinorGreenRectGrunt(collison_scene_manager.getTower(), new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y + 0));
+
       background_factory.createBackdrop(new Color().rgb(0x071c16));
 
-      level_builder.makeOrePatch(50, 150,150, new Vector(0,0), collison_scene_manager);
-      level_builder.makeOrePatch(50, 200,200, new Vector(550,0), collison_scene_manager);
-      level_builder.makeOrePatch(50, 200,200, new Vector(-300,550), collison_scene_manager);
+      LevelBuilder.makeOrePatch(20, 150,150, new Vector(0,0), collison_scene_manager);
+      LevelBuilder.makeOrePatch(20, 200,200, new Vector(550,0), collison_scene_manager);
+      LevelBuilder.makeOrePatch(20, 200,200, new Vector(-300,550), collison_scene_manager);
 
-      level_builder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y));
+      LevelBuilder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y));
 
     case 'level3':
 
