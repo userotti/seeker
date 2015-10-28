@@ -11,7 +11,8 @@ import components.tower.ForceBodyComponent;
 import luxe.Color;
 import luxe.collision.shapes.*;
 import com.elnabo.quadtree.*;
-import helpers.game.CollisionTreeManager;
+
+import sprites.game.*;
 
 class ForceFieldComponent extends Component implements QuadtreeElement{
 
@@ -20,10 +21,8 @@ class ForceFieldComponent extends Component implements QuadtreeElement{
   public var big_radius : Float;
   public var small_radius : Float;
 
-  private var tower : Sprite;
+  private var tower : CollidableSprite;
   public var constant_force : Float;
-  public var collision_tree_manager : CollisionTreeManager;
-
   private var bounding_box : Box;
   private var my_collisions : Array<QuadtreeElement>;
 
@@ -51,7 +50,8 @@ class ForceFieldComponent extends Component implements QuadtreeElement{
     bounding_box.x = Std.int(tower.pos.x-(big_radius));
     bounding_box.y = Std.int(tower.pos.y-(big_radius));
 
-    my_collisions = (collision_tree_manager.collision_tree.getCollision(this.bounding_box));
+    my_collisions = (tower.collision_tree.collision_tree.getCollision(this.bounding_box));
+
     for(collision in my_collisions){
       var component = cast(collision, Component);
       if ((component.entity.name != this.entity.name) && (component.name == ForceBodyComponent.TAG)){

@@ -7,10 +7,8 @@ import luxe.Visual;
 import luxe.Entity;
 
 import com.elnabo.quadtree.*;
-import helpers.game.CollisionTreeManager;
-import helpers.game.EffectsSceneManager;
 import components.tower.DefenceComponent;
-import helpers.game.EffectBuilder;
+import sprites.game.*;
 
 class OffenceComponent extends Component implements QuadtreeElement{
 
@@ -22,12 +20,10 @@ class OffenceComponent extends Component implements QuadtreeElement{
   public var reload_speed : Float;
   public var reload_cooldown : Float;
 
-  public var tower : Sprite;
-  public var collision_tree_manager : CollisionTreeManager;
+  public var tower : CollidableSprite;
   private var bounding_box : Box;
   private var my_collisions : Array<QuadtreeElement>;
   private var utility_vector : Vector;
-  public var effects_scene_manager : EffectsSceneManager;
 
   public function new(json:Dynamic){
     super(json);
@@ -56,7 +52,7 @@ class OffenceComponent extends Component implements QuadtreeElement{
 
     //this is just a performance check;
     if (reload_cooldown >= 100){
-      my_collisions = (collision_tree_manager.collision_tree.getCollision(this.bounding_box));
+      my_collisions = (tower.collision_tree.collision_tree.getCollision(this.bounding_box));
       for(collision in my_collisions){
         var component = cast(collision, Component);
         if ((component.entity.name != this.entity.name) && (component.name == DefenceComponent.TAG)){
@@ -90,14 +86,14 @@ class OffenceComponent extends Component implements QuadtreeElement{
         body.kap(damage);
         reload_cooldown = 0;
 
-        EffectBuilder.makeFloater(effects_scene_manager.getFloater(), new Vector(tower.pos.x,tower.pos.y), new Vector(20,-20), 1.5, 'smoke_triangle-01.png', 6);
+        //fire effect event
+        //EffectBuilder.makeFloater(effects_scene_manager.getFloater(), new Vector(tower.pos.x,tower.pos.y), new Vector(20,-20), 1.5, 'smoke_triangle-01.png', 6);
 
       }
     };
   } //update
 
   public function setup (_big_radius:Float, _small_radius:Float, _damage:Float, _reload_speed:Float){
-
 
     big_radius = _big_radius;
     small_radius = _small_radius;

@@ -20,16 +20,11 @@ class DefenceComponent extends Component implements QuadtreeElement{
   public var max_hull : Float;
   public var tower : Sprite;
   public var hit_radius: Float;
-
-  public var effects_scene_manager : EffectsSceneManager;
-  private var collision_scene_manager : CollisionSceneManager;
   private var bounding_box : Box;
 
-  public function new(json:Dynamic, _collision_scene_manager:CollisionSceneManager){
+  public function new(json:Dynamic){
     super(json);
     bounding_box = new Box(0,0,0,0);
-    collision_scene_manager = _collision_scene_manager;
-
   }
   override function init() {
     tower = cast(this.entity, Sprite);
@@ -50,10 +45,11 @@ class DefenceComponent extends Component implements QuadtreeElement{
     if (hull <= 0){
 
       for(i in 1...50){
-        EffectBuilder.makeFloater(effects_scene_manager.getFloater(), new Vector(tower.pos.x,tower.pos.y), new Vector((Math.random()*240) - 120,(Math.random()*240) - 120), 1.5, 'smoke_triangle-01.png', 6);
+        //fire effect event
+        //EffectBuilder.makeFloater(effects_scene_manager.getFloater(), new Vector(tower.pos.x,tower.pos.y), new Vector((Math.random()*240) - 120,(Math.random()*240) - 120), 1.5, 'smoke_triangle-01.png', 6);
       }
 
-      collision_scene_manager.kill(this.tower);
+      //collision_scene_manager.kill(this.tower);
     }
 
   }

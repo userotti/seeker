@@ -76,4 +76,36 @@ class CollisionTreeManager {
 
   }
 
+  public function removeAll(_entities : Map<String, luxe.Entity>){
+
+    for (entity in _entities){
+
+      entity_components = entity.get_any(ForceBodyComponent.TAG, true);
+      for(component in entity_components){
+        collision_tree.remove(cast(component, QuadtreeElement));
+
+      }
+
+      entity_components = entity.get_any(ForceFieldComponent.TAG, true);
+      for(component in entity_components){
+        collision_tree.remove(cast(component, QuadtreeElement));
+
+      }
+
+      entity_components = entity.get_any(DefenceComponent.TAG, true);
+      for(component in entity_components){
+        collision_tree.remove(cast(component, QuadtreeElement));
+        trace('removed');
+
+      }
+
+      entity_components = entity.get_any(OffenceComponent.TAG, true);
+      for(component in entity_components){
+        collision_tree.remove(cast(component, QuadtreeElement));
+
+      }
+    }
+
+  }
+
 }

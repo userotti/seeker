@@ -25,7 +25,7 @@ class GameState extends luxe.States.State {
 
   var mouse : Vector;
   var zoomfactor : Vector;
-  var player : TextureSprite;
+  var player : CollidableSprite;
 
   private var level_name : String;
 
@@ -49,7 +49,7 @@ class GameState extends luxe.States.State {
     level_name = '';
 
     effect_scene_manager = new EffectsSceneManager();
-    collison_scene_manager = new CollisionSceneManager(effect_scene_manager);
+    collison_scene_manager = new CollisionSceneManager();
 
     background_scene = new Scene('background_scene');
     hud_scene = new Scene('hud_scene');
@@ -68,7 +68,7 @@ class GameState extends luxe.States.State {
 
     //Build the level
     buildLevel();
-
+    //
     hud_factory.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632)).setTower(player);
     hud_factory.createFuelStatBar(new Vector(Luxe.screen.w-10-20-20, Luxe.screen.h-20), new Color().rgb(0x673677)).setTower(player);
     hud_factory.createMovementStatBar(new Vector(Luxe.screen.w-10-20-80, Luxe.screen.h-20), new Color().rgb(0x556677)).setTower(player);
@@ -131,7 +131,7 @@ class GameState extends luxe.States.State {
       }
 
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-      
+
     case 'level2':
 
       player = collison_scene_manager.getTower();
