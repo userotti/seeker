@@ -1,5 +1,7 @@
 package helpers.game;
 
+
+import luxe.Entity;
 import luxe.Vector;
 import luxe.Visual;
 import luxe.Color;
@@ -25,6 +27,16 @@ class EffectBuilder {
     _floater.resetTexture(_texture, _depth);
     _floater.get(MovementComponent.TAG).velocity = _vel;
     _floater.get(TimedKillComponent.TAG).setup(_lifetime, 0);
+
+  }
+
+  public static function makeIndicator (_indicator: TextureSprite, _follow:Entity, _texture:String, _depth:Int){
+
+    _indicator.pos.x = _follow.pos.x;
+    _indicator.pos.y = _follow.pos.y;
+    _indicator.depth = _depth;
+    _indicator.resetTexture(_texture, _depth);
+    _indicator.get(HoverComponent.TAG).setup(_follow);
 
   }
 

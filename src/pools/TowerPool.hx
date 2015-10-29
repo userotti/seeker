@@ -54,21 +54,7 @@ class  TowerPool extends Pool<CollidableSprite>{
     var offence = new OffenceComponent({ name: OffenceComponent.TAG });
     tower.add(offence);
 
-    // var force_indicator = new Sprite({
-    //   name: 'force_indicator',
-    //   depth: 12,
-    //   pos: new Vector(32.5,32.5), //the parent (w/2, w/2)
-    //   origin: new Vector(50,15), // (distance from the center, indicator w/2)
-    //   texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
-    //   parent: tower,
-    //   scene: this,
-    //   batcher: Luxe.renderer.batcher
-    // });
-    //
-    // force_indicator.active = false;
-    // force_indicator.visible = false;
-    //needs a force body
-    //force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
+    
 
     return tower;
   }

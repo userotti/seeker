@@ -15,10 +15,13 @@ import components.tower.AppearanceComponent;
 import luxe.structural.Pool;
 
 import sprites.game.*;
+import pools.*;
+
 
 class EffectsSceneManager extends Scene {
 
-  public var floater_pool: Pool<TextureSprite>;
+  public var floater_pool: FloaterPool;
+  public var indicator_pool: DirectionIndicatorPool;
 
   public function new() {
     super('effects_scene');
@@ -26,7 +29,11 @@ class EffectsSceneManager extends Scene {
 
   //FLOATER ====================================================
   public function setupFloaterPool(_floater_pool_size: Int){
-    floater_pool = new Pool<TextureSprite>(_floater_pool_size, buildFloater);
+    floater_pool = new FloaterPool(_floater_pool_size, this);
+  };
+
+  public function setupIndicatorPool(_indicator_pool_size: Int){
+    indicator_pool = new DirectionIndicatorPool(_indicator_pool_size, this);
   };
 
   public function getFloater(){
@@ -36,23 +43,25 @@ class EffectsSceneManager extends Scene {
     return f;
   }
 
-  public function buildFloater (index: Int, total: Int){
+  public function getIndicator(){
+    var i = indicator_pool.get();
+    i.visible = true;
+    i.active = true;
+    return i;
+  }
 
-    var floater = new TextureSprite({
-      name: 'floater'+index,
-      scene: this,
-      batcher: Luxe.renderer.batcher
-    });
-
-    floater.active = false;
-    floater.visible = false;
-    floater.add(new MovementComponent({ name: MovementComponent.TAG }));
-    floater.add(new TimedKillComponent({ name: TimedKillComponent.TAG }));
-
-    return floater;
+  public function kill(_entity:TextureSprite){
+    _entity.visible = false;
+    _entity.active = false;
+    for (child in _entity.children){
+      kill(cast(child, TextureSprite));
+    }
   }
 
   public function destroyContents(){
+    for(entity in entities){
+      kill(cast(entity, TextureSprite));
+    }
     this.empty();
     floater_pool = null;
   }

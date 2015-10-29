@@ -16,6 +16,7 @@ import luxe.collision.shapes.*;
 import luxe.collision.data.*;
 
 import components.tower.*;
+import components.effects.*;
 
 import helpers.game.*;
 import sprites.game.*;
@@ -67,6 +68,8 @@ class GameState extends luxe.States.State {
   override function onenter<T>(_:T) {
 
     //Build the level
+    setupEvents();
+
     buildLevel();
     //
     hud_factory.createCooldownStatBar(new Vector(Luxe.screen.w-10-20, Luxe.screen.h-20), new Color().rgb(0x885632)).setTower(player);
@@ -81,12 +84,15 @@ class GameState extends luxe.States.State {
     trace('onmousedown');
     if (player != null){
       player.get(BoostComponent.TAG).boostOn(Luxe.camera.screen_point_to_world(new Vector(event.x,event.y)),40);
+
     }
 
   } //onmousemove
 
   //This gets called when the state changes. Menu -> Game
   override function onleave<T>(_:T) {
+
+    cancelEvents();
 
     effect_scene_manager.destroyContents();
     collison_scene_manager.destroyContents();
@@ -111,6 +117,31 @@ class GameState extends luxe.States.State {
     Luxe.camera.zoom = 1;// - (zoomfactor.lengthsq * 0.00000025);
   }
 
+  public function setupEvents(){
+    Luxe.events.listen('kill_collidable', function(e){
+        trace('kill_collidable event');
+        collison_scene_manager.kill(e.collidable);
+    });
+
+    Luxe.events.listen('kill_effect', function(e){
+        effect_scene_manager.kill(e.effect);
+    });
+
+    Luxe.events.listen('attach_force_indicator', function(e){
+        var effect = effect_scene_manager.getIndicator();
+        EffectBuilder.makeIndicator(effect, e.force_body.owner, 'force_indicator-01.png', 12);
+        e.force_body.indicator = effect.get(DirectionIndicatorComponent.TAG);
+    });
+  }
+
+  public function cancelEvents(){
+    Luxe.events.unlisten('kill_collidable');
+    Luxe.events.unlisten('kill_effect');
+    Luxe.events.unlisten('attach_force_indicator');
+    trace('Luxe.events.unlisten' + Luxe.events.unlisten('kill_collidable'));
+    Luxe.events.destroy();
+  }
+
   //this needs to be removed into some other class
   private function buildLevel(){
 
@@ -119,33 +150,34 @@ class GameState extends luxe.States.State {
     collison_scene_manager.setupTowerPool(20);
     collison_scene_manager.setupPushablePool(250);
     effect_scene_manager.setupFloaterPool(100);
+    effect_scene_manager.setupIndicatorPool(100);
 
     switch level_name{
 
     case 'level1':
-      player = collison_scene_manager.getTower();
-      LevelBuilder.makeMinorBlueTriGrunt(player, new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y + 0));
-
-      for(i in 1...10){
-        LevelBuilder.makeMinorRedHexGrunt(collison_scene_manager.getTower(), new Vector(Math.random(), Math.random()));
-      }
-
-      background_factory.createBackdrop(new Color().rgb(0x071c16));
+      // player = collison_scene_manager.getTower();
+      // LevelBuilder.makeMinorBlueTriGrunt(player, new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y + 0));
+      //
+      // for(i in 1...10){
+      //   LevelBuilder.makeMinorRedHexGrunt(collison_scene_manager.getTower(), new Vector(Math.random(), Math.random()));
+      // }
+      //
+      // background_factory.createBackdrop(new Color().rgb(0x071c16));
 
     case 'level2':
 
       player = collison_scene_manager.getTower();
-      LevelBuilder.makeMinorBlueTriGrunt(player, new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y + 0));
+      LevelBuilder.makeMinorBlueTriGrunt(player, new Vector(0,0));
 
-      LevelBuilder.makeMinorGreenRectGrunt(collison_scene_manager.getTower(), new Vector(Luxe.screen.mid.x - 350, Luxe.screen.mid.y + 0));
+      LevelBuilder.makeMinorGreenRectGrunt(collison_scene_manager.getTower(), new Vector(0 - 350, 0 + 0));
 
       background_factory.createBackdrop(new Color().rgb(0x071c16));
 
-      LevelBuilder.makeOrePatch(20, 150,150, new Vector(0,0), collison_scene_manager);
-      LevelBuilder.makeOrePatch(20, 200,200, new Vector(550,0), collison_scene_manager);
-      LevelBuilder.makeOrePatch(20, 200,200, new Vector(-300,550), collison_scene_manager);
+      LevelBuilder.makeOrePatch(50, 150,150, new Vector(-500,0), collison_scene_manager);
+      LevelBuilder.makeOrePatch(50, 200,200, new Vector(-350,-300), collison_scene_manager);
+      LevelBuilder.makeOrePatch(50, 200,200, new Vector(-300,450), collison_scene_manager);
 
-      LevelBuilder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y));
+      LevelBuilder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(0, 0));
 
     case 'level3':
 

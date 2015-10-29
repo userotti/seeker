@@ -8,7 +8,7 @@ import components.tower.*;
 
 import sprites.game.*;
 
-class  PushablePool extends Pool<Entity>{
+class  PushablePool extends Pool<CollidableSprite>{
 
   private var scene : Scene;
 

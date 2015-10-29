@@ -8,6 +8,8 @@ import luxe.Color;
 import luxe.collision.shapes.*;
 import com.elnabo.quadtree.*;
 
+import components.effects.*;
+
 class ForceBodyComponent extends Component implements QuadtreeElement {
 
   public static var TAG = 'ForceBodyComponent';
@@ -17,6 +19,8 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
   public var total_force : Vector;
   public var total_force_record : Vector;
   public var being_forced : Bool;
+  public var has_indicator : Bool;
+  public var indicator : DirectionIndicatorComponent;
 
   private var bounding_box : Box;
 
@@ -41,25 +45,48 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
     bounding_box.y = Std.int(owner.pos.y-(hit_radius));
 
     if (being_forced == true){
+
+      //manage my own indicator
+      if (has_indicator == false){
+
+        Luxe.events.fire('attach_force_indicator', {force_body: this});
+        has_indicator = true;
+      }
+
+      if (indicator != null){
+        indicator.direction_vector.x = total_force.x;
+        indicator.direction_vector.y = total_force.y;
+      }
+
+
+
       total_force_record.x = total_force.x;
       total_force_record.y = total_force.y;
       owner.get(AccelerationComponent.TAG).acceleration.add(total_force);
       total_force.x = 0;
       total_force.y = 0;
       being_forced = false;
+
     }else{
+
+      //manage my own indicator
+
+      if (has_indicator == true){
+        Luxe.events.fire('kill_effect', {effect: this.indicator.indicator});
+        this.indicator = null;
+        has_indicator = false;
+      }
+
+
       total_force_record.x = 0;
       total_force_record.y = 0;
     }
-
-
-
 
   } //update
 
   public function setup(_hit_radius:Float){
 
-    hit_radius = _hit_radius;
+    has_indicator = false;
     bounding_box.width = Std.int(hit_radius*2);
     bounding_box.height = Std.int(hit_radius*2);
 
