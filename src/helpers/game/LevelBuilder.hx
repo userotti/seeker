@@ -35,7 +35,7 @@ class LevelBuilder {
     _tower.rotation_z = Math.random()*360;
     _tower.resetTexture('metal_guy_red-01.png',8);
     _tower.get(CooldownComponent.TAG).setup(4.8);
-    _tower.get(FrictionComponent.TAG).setup(50);
+    _tower.get(FrictionComponent.TAG).setup(100);
     _tower.get(BreakComponent.TAG).setup(50);
     _tower.get(BoostComponent.TAG).setup(310, 140000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
@@ -51,7 +51,7 @@ class LevelBuilder {
     _tower.rotation_z = Math.random()*360;
     _tower.resetTexture('metal_guy_green-01.png',8);
     _tower.get(CooldownComponent.TAG).setup(4.8);
-    _tower.get(FrictionComponent.TAG).setup(50);
+    _tower.get(FrictionComponent.TAG).setup(100);
     _tower.get(BreakComponent.TAG).setup(200);
     _tower.get(BoostComponent.TAG).setup(310, 140000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
@@ -67,7 +67,7 @@ class LevelBuilder {
     _tower.rotation_z = Math.random()*360;
     _tower.resetTexture('metal_guy-01.png',8);
     _tower.get(CooldownComponent.TAG).setup(4.8);
-    _tower.get(FrictionComponent.TAG).setup(50);
+    _tower.get(FrictionComponent.TAG).setup(100);
     _tower.get(BreakComponent.TAG).setup(200);
     _tower.get(BoostComponent.TAG).setup(410, 20000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1);//hit_radius

@@ -25,6 +25,8 @@ class OffenceComponent extends Component implements QuadtreeElement{
   private var my_collisions : Array<QuadtreeElement>;
   private var utility_vector : Vector;
 
+  private var current_target : DefenceComponent;
+
   public function new(json:Dynamic){
     super(json);
     utility_vector = new Vector(0,0);
@@ -56,10 +58,14 @@ class OffenceComponent extends Component implements QuadtreeElement{
       for(collision in my_collisions){
         var component = cast(collision, Component);
         if ((component.entity.name != this.entity.name) && (component.name == DefenceComponent.TAG)){
-          checkAndAttack(cast (component, DefenceComponent));
+          checkAndSetTarget(cast (component, DefenceComponent));
         }
       }//All my collisions
 
+      if (current_target != null){
+        attack();
+        current_target = null;
+      }
 
     }else{
       if (reload_cooldown < 100){
@@ -76,24 +82,32 @@ class OffenceComponent extends Component implements QuadtreeElement{
     return false;
   };
 
-  public function checkAndAttack(_body:DefenceComponent){
+
+  public function checkAndSetTarget(_body:DefenceComponent){
     if (reload_cooldown >= 100){
       if (circleCollision(big_radius, _body)){
         if (!circleCollision(small_radius, _body)){
-          attack(_body);
+          if (current_target == null){
+            current_target = _body;
+          }else{
+            //who is closest
+            if ((Math.pow(_body.pos.x - this.pos.x, 2) + Math.pow(_body.pos.y - this.pos.y, 2)) < (Math.pow(current_target.pos.x - this.pos.x, 2) + Math.pow(current_target.pos.y - this.pos.y, 2))){
+              current_target = _body;
+            }
+          }
+
         }
       };
     }
     return false;
   };
 
-  public function attack(_body:DefenceComponent) {
+  public function attack() {
 
-    _body.kap(damage, tower);
+    current_target.kap(damage, tower);
     reload_cooldown = 0;
-
     //fire effect event
-    Luxe.events.fire('tower_shoot', {target:_body.tower, attacker: tower});
+    Luxe.events.fire('tower_shoot', {target:current_target.tower, attacker: tower});
   } //update
 
   public function setup (_big_radius:Float, _small_radius:Float, _damage:Float, _reload_speed:Float){
@@ -102,6 +116,7 @@ class OffenceComponent extends Component implements QuadtreeElement{
     small_radius = _small_radius;
     damage = _damage;
     reload_speed = _reload_speed;
+    current_target = null;
 
   }
 

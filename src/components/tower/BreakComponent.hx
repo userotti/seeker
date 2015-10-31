@@ -38,19 +38,15 @@ class BreakComponent extends Component {
 
         utility_vector.x = movement.velocity.x * -1;
         utility_vector.y = movement.velocity.y * -1;
-
         utility_vector.normalize();
 
-
-        //Crappy hack
         utility_float = movement.velocity.lengthsq;
-        if (Math.pow(break_friction_power,2) < utility_float){
-           utility_vector.multiplyScalar(break_friction_power);
-        }else{
-           utility_vector.multiplyScalar(Math.sqrt(utility_float));
+
+        if (utility_float > 0){
+          utility_vector.multiplyScalar(break_friction_power);
+          acceleration.acceleration.add(utility_vector);
         }
 
-        acceleration.acceleration.add(utility_vector);
       }
     }
   } //update
