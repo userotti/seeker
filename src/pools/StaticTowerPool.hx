@@ -28,6 +28,7 @@ class  StaticTowerPool extends Pool<CollidableSprite>{
     static_tower.visible = false;
     static_tower.active = false;
     static_tower.add(new ForceFieldComponent({ name: ForceFieldComponent.TAG }));
+    static_tower.add(new MetaDataComponent({ name: MetaDataComponent.TAG }));
 
     return static_tower;
   }

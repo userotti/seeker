@@ -88,6 +88,23 @@ class CollisionSceneManager extends Scene {
     pushable_pool = new PushablePool(_pushable_pool_size, this);
   };
 
+  //Deativate All ============================================
+  public function deactivateAll(){
+    for (entity in entities){
+      if(entity.active){
+        entity.active = false;
+      }
+    }
+  }
+
+  public function activateAllVisible(){
+    for (entity in entities){
+      if (cast(entity, Sprite).visible == true){
+        entity.active = true;
+      }
+    }
+  }
+
   //Clean up scene =================================================
   public function destroyContents(){
     //collision_tree_manager.removeAll(entities);

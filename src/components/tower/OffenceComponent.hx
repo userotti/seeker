@@ -56,14 +56,11 @@ class OffenceComponent extends Component implements QuadtreeElement{
       for(collision in my_collisions){
         var component = cast(collision, Component);
         if ((component.entity.name != this.entity.name) && (component.name == DefenceComponent.TAG)){
-
-          //check again can't hit 2 naiers at once;
-          if (reload_cooldown >= 100){
-            attack(cast(component, DefenceComponent));
-          }
-
+          checkAndAttack(cast (component, DefenceComponent));
         }
-      }
+      }//All my collisions
+
+
     }else{
       if (reload_cooldown < 100){
         reload_cooldown = reload_cooldown + dt*reload_speed;
@@ -79,18 +76,24 @@ class OffenceComponent extends Component implements QuadtreeElement{
     return false;
   };
 
-  public function attack(body:DefenceComponent) {
-    if (circleCollision(big_radius, body)){
-      if (!circleCollision(small_radius, body)){
+  public function checkAndAttack(_body:DefenceComponent){
+    if (reload_cooldown >= 100){
+      if (circleCollision(big_radius, _body)){
+        if (!circleCollision(small_radius, _body)){
+          attack(_body);
+        }
+      };
+    }
+    return false;
+  };
 
-        body.kap(damage);
-        reload_cooldown = 0;
+  public function attack(_body:DefenceComponent) {
 
-        //fire effect event
-        //EffectBuilder.makeFloater(effects_scene_manager.getFloater(), new Vector(tower.pos.x,tower.pos.y), new Vector(20,-20), 1.5, 'smoke_triangle-01.png', 6);
+    _body.kap(damage, tower);
+    reload_cooldown = 0;
 
-      }
-    };
+    //fire effect event
+    Luxe.events.fire('tower_shoot', {target:_body.tower, attacker: tower});
   } //update
 
   public function setup (_big_radius:Float, _small_radius:Float, _damage:Float, _reload_speed:Float){

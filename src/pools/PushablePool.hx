@@ -38,30 +38,7 @@ class  PushablePool extends Pool<CollidableSprite>{
     pushable.add(new FrictionComponent({ name: FrictionComponent.TAG }));
     //needs a force manager
     pushable.add(new ForceBodyComponent({ name: ForceBodyComponent.TAG }));
-
-    //chird of the ore
-    // var force_indicator = new Sprite({
-    //   name: 'force_indicator',
-    //   depth: 12,
-    //   pos: new Vector(15,15),
-    //   origin: new Vector(25+15,0+15),
-    //   parent: pushable,
-    //   scene: this,
-    //   texture : Luxe.resources.texture('assets/images/rasters/force_indicator-01.png'),
-    //   batcher: Luxe.renderer.batcher
-    // });
-    //
-    // force_indicator.active = false;
-    // force_indicator.visible = false;
-    // //needs a force body
-    // force_indicator.add(new ForceIndicatorComponent({name: ForceIndicatorComponent.TAG}));
-
-
-    //force mekaar?
-
-    // var force_field = new ForceFieldComponent({ name: ForceFieldComponent.TAG });
-    // force_field.collision_tree_manager = this.collision_tree_manager;
-    // pushable.add(force_field);
+    pushable.add(new MetaDataComponent({ name: MetaDataComponent.TAG }));
 
     return pushable;
   }

@@ -11,7 +11,7 @@ class TextureSprite extends Sprite{
     super(_json);
   };
 
-  public function resetTexture(_texture:String, _depth: Int){
+  public function resetTexture(_texture:String, _depth: Float){
 
     depth = _depth;
     var wa = Luxe.resources.texture("assets/images/rasters/"+_texture).width_actual;

@@ -15,6 +15,7 @@ import components.utility.*;
 import luxe.structural.Pool;
 
 import helpers.game.CollisionSceneManager;
+
 import sprites.game.*;
 
 //A Big List of presets build functions.
@@ -25,6 +26,7 @@ class LevelBuilder {
     _static_tower.pos = _pos;
     _static_tower.resetTexture('metal_nest-01.png', 10);
     _static_tower.get(ForceFieldComponent.TAG).setup(200, 50, 200);
+    _static_tower.get(MetaDataComponent.TAG).setup('static_tower', 'blue');
   }
 
   //TOWERS =================================================
@@ -39,7 +41,8 @@ class LevelBuilder {
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
     _tower.get(ForceFieldComponent.TAG).setup(150, 50, 200); //bigradius, small_radius constant_force
     _tower.get(DefenceComponent.TAG).setup(2, 100); //bigradius, max_hull
-    _tower.get(OffenceComponent.TAG).setup(300, 50, 5, 100); //bigradius, small_radius, damage, reload
+    _tower.get(OffenceComponent.TAG).setup(500, 50, 5, 400); //bigradius, small_radius, damage, reload
+    _tower.get(MetaDataComponent.TAG).setup('tower', 'red');
 
   }
 
@@ -55,6 +58,7 @@ class LevelBuilder {
     _tower.get(ForceFieldComponent.TAG).setup(150, 50, 200); //bigradius, small_radius constant_force
     _tower.get(DefenceComponent.TAG).setup(2, 100); //bigradius, max_hull
     _tower.get(OffenceComponent.TAG).setup(100, 50, 1, 100); //bigradius, small_radius, damage, reload
+    _tower.get(MetaDataComponent.TAG).setup('tower', 'green');
 
   }
 
@@ -69,16 +73,19 @@ class LevelBuilder {
     _tower.get(ForceBodyComponent.TAG).setup(1);//hit_radius
     _tower.get(ForceFieldComponent.TAG).setup(200, 50, 200);//bigradius, small_radius constant_force
     _tower.get(DefenceComponent.TAG).setup(2, 100);//bigradius, small_radius
-    _tower.get(OffenceComponent.TAG).setup(200, 50, 25, 100);//bigradius, small_radius, , ddudeamage, reload
+    _tower.get(OffenceComponent.TAG).setup(200, 50, 25, 500);//bigradius, small_radius, , ddudeamage, reload
+    _tower.get(MetaDataComponent.TAG).setup('tower', 'blue');
+
   }
 
   //PUSAHBLES ===========================================
-  public static function makeOre(_tower:TextureSprite, _pos:Vector){
-    _tower.pos = _pos;
-    _tower.rotation_z = Math.random()*360;
-    _tower.resetTexture('yellow_ore-01.png', 9);
-    _tower.get(FrictionComponent.TAG).setup(100);
-    _tower.get(ForceBodyComponent.TAG).setup(1);
+  public static function makeOre(_floater:TextureSprite, _pos:Vector){
+    _floater.pos = _pos;
+    _floater.rotation_z = Math.random()*360;
+    _floater.resetTexture('yellow_ore-01.png', 9);
+    _floater.get(FrictionComponent.TAG).setup(100);
+    _floater.get(ForceBodyComponent.TAG).setup(1);
+    _floater.get(MetaDataComponent.TAG).setup('ore', 'yellow');
   }
 
   public static function makeOrePatch(_amount:Int, _w:Int, _h:Int, _pos:Vector, csm:CollisionSceneManager){

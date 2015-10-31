@@ -36,25 +36,18 @@ class  TowerPool extends Pool<CollidableSprite>{
     tower.add(new FrictionComponent({ name: FrictionComponent.TAG }));
     tower.add(new BreakComponent({ name: BreakComponent.TAG }));
     //needs all of the above
-    var boost_component = new BoostComponent({ name: BoostComponent.TAG });
     //needs to be able to create things...
-    tower.add(boost_component);
+    tower.add(new BoostComponent({ name: BoostComponent.TAG }));
     //needs boost
     tower.add(new AppearanceComponent({ name: AppearanceComponent.TAG }));
-
     //needs a force manager //Askes the force manager to push him around.
     tower.add(new ForceBodyComponent({ name: ForceBodyComponent.TAG }));
     //doesnt need a forcemanager
-    var force_field = new ForceFieldComponent({ name: ForceFieldComponent.TAG });
-    tower.add(force_field);
+    tower.add(new ForceFieldComponent({ name: ForceFieldComponent.TAG }));
+    tower.add(new DefenceComponent({ name: DefenceComponent.TAG }));
+    tower.add(new OffenceComponent({ name: OffenceComponent.TAG }));
+    tower.add(new MetaDataComponent({ name: MetaDataComponent.TAG }));
 
-    var defence = new DefenceComponent({ name: DefenceComponent.TAG });
-    tower.add(defence);
-
-    var offence = new OffenceComponent({ name: OffenceComponent.TAG });
-    tower.add(offence);
-
-    
 
     return tower;
   }

@@ -58,6 +58,23 @@ class EffectsSceneManager extends Scene {
     }
   }
 
+  //Deativate All ============================================
+  public function deactivateAll(){
+    for (entity in entities){
+      if(entity.active){
+        entity.active = false;
+      }
+    }
+  }
+
+  public function activateAllVisible(){
+    for (entity in entities){
+      if (cast(entity, Sprite).visible == true){
+        entity.active = true;
+      }
+    }
+  }
+
   public function destroyContents(){
     for(entity in entities){
       kill(cast(entity, TextureSprite));
