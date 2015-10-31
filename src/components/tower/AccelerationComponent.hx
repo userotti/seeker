@@ -27,6 +27,7 @@ class AccelerationComponent extends Component {
 
   override function update(dt:Float) {
 
+    
     movement.velocity.x += (acceleration.x * dt) / mass;
     movement.velocity.y += (acceleration.y * dt) / mass;
 

@@ -70,6 +70,11 @@ class CollisionSceneManager extends Scene {
       _entity.collision_tree = null;
     }
 
+    for(component in _entity.components){
+      //I've put some destor code in here, should probably extend the component class and put akill meoth in there.
+      component.init();
+    }
+
     for (child in _entity.children){
       kill(cast(child, CollidableSprite));
     }

@@ -34,13 +34,14 @@ class EffectBuilder {
 
   }
 
-  public static function makeIndicator (_indicator: TextureSprite, _follow:Entity, _texture:String, _depth:Int){
+  public static function makeIndicator (_indicator: TextureSprite, _follow:Entity, _direction_vector:Vector, _origin_x:Float, _texture:String, _depth:Int){
 
-    _indicator.pos.x = _follow.pos.x;
-    _indicator.pos.y = _follow.pos.y;
+
     _indicator.depth = _depth;
     _indicator.resetTexture(_texture, _depth);
-    _indicator.get(HoverComponent.TAG).setup(_follow);
+    _indicator.get(HoverComponent.TAG).setup(_follow, _origin_x);
+    _indicator.origin.x = _origin_x; // (distance from the center, indicator w/2)
+    _indicator.rotation_z = (Math.atan2(_direction_vector.y, _direction_vector.x) / Math.PI) * 180;
 
   }
 
@@ -67,14 +68,14 @@ class EffectBuilder {
 
       for(i in 0...2){
         var rotation_to = _attacker.pos.rotationTo(_target.pos) - 90;
-        var rotation_to_deviated = (rotation_to + Math.random()*150 - 75) / 180 * Math.PI;
+        var rotation_to_deviated = (rotation_to + Math.random()*100 - 50) / 180 * Math.PI;
 
         makeFloater(esm.getFloater(),
         new Vector(_attacker.pos.x + Math.cos((rotation_to / 180) * Math.PI)*30,_attacker.pos.y + Math.sin((rotation_to / 180)* Math.PI)*30),
         new Vector(0,0), //origin
-        new Vector(Math.cos(rotation_to_deviated)*30,Math.sin(rotation_to_deviated)*30), //velocity
+        new Vector(Math.cos(rotation_to_deviated)*170,Math.sin(rotation_to_deviated)*170), //velocity
         (rotation_to_deviated/Math.PI) * 180,
-        (Math.random()*0.3) + 0.2,
+        (Math.random()*0.1) + 0.1,
         'blue_weapon_smoke-01.png',
         12);
 
@@ -92,7 +93,6 @@ class EffectBuilder {
   }
 
   public static function makeHullHit (_target: TextureSprite, _attacker: TextureSprite, esm: EffectsSceneManager){
-
 
     if (_target.get(MetaDataComponent.TAG).type_name == 'tower'){
       makeFloater(esm.getFloater(),
@@ -127,7 +127,7 @@ class EffectBuilder {
         12);
 
         makeFloater(esm.getFloater(),
-        new Vector(_target.pos.x + Math.cos((rotation_to / 180) * Math.PI)*30,_target.pos.y + Math.sin((rotation_to / 180)* Math.PI)*30),
+        new Vector(_target.pos.x + Math.cos((rotation_to / 180) * Math.PI)*10,_target.pos.y + Math.sin((rotation_to / 180)* Math.PI)*10),
         new Vector(0,0), //origin
         new Vector(Math.cos(rotation_to_deviated)*30,Math.sin(rotation_to_deviated)*30), //velocity
         (rotation_to_deviated/Math.PI) * 180,
@@ -136,8 +136,37 @@ class EffectBuilder {
         12);
       }
     }
-
   }
+
+  public static function makeTowerDestory (_dead_tower: TextureSprite, esm: EffectsSceneManager){
+    for(i in 0...13){
+      var random_angle = (Math.random()*360) / 180 * Math.PI;
+
+      makeFloater(esm.getFloater(),
+      new Vector(_dead_tower.pos.x, _dead_tower.pos.y),
+      new Vector(0,0), //origin
+      new Vector(Math.cos(random_angle)*180,Math.sin(random_angle)*180), //velocity
+      (random_angle/Math.PI) * 180,
+      (Math.random()*0.2) + 0.1,
+      'spark-01.png',
+      12);
+
+    }
+    for(i in 0...18){
+      var random_angle = (Math.random()*360) / 180 * Math.PI;
+
+      makeFloater(esm.getFloater(),
+      new Vector(_dead_tower.pos.x,_dead_tower.pos.y),
+      new Vector(0,0), //origin
+      new Vector(Math.cos(random_angle)*Math.random()*20,Math.sin(random_angle)*Math.random()*20), //velocity
+      (random_angle/Math.PI) * 180,
+      (Math.random()*1.2) + 1.1,
+      'smoke_triangle-01.png',
+      12);
+
+    }
+  }
+
 
 
 }

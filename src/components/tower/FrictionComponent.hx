@@ -20,6 +20,7 @@ class FrictionComponent extends Component {
   private var utility_vector : Vector;
 
   private var movement_velocity_angle : Float;
+  private var final_fric : Float;
 
   public function new(json:Dynamic){
     super(json);
@@ -33,22 +34,17 @@ class FrictionComponent extends Component {
 
   override function update(dt:Float) {
 
-    if ((movement.velocity.x != 0) || (movement.velocity.y != 0)){
-      utility_vector.x = 0;
-      utility_vector.y = 0;
-
+    utility_float = movement.velocity.length;
+    //performance check
+    if (utility_float > 0.001){
+      final_fric = friction_power - (friction_power + 0.05*utility_float)/(1 + 0.05*utility_float);
       utility_vector.x = movement.velocity.x * -1;
       utility_vector.y = movement.velocity.y * -1;
       utility_vector.normalize();
 
-      utility_float = movement.velocity.lengthsq;
-
-      if (utility_float > 0){
-          utility_vector.multiplyScalar(friction_power);
-          acceleration.acceleration.add(utility_vector);
-      }
-
-    }
+      utility_vector.multiplyScalar(final_fric);
+      acceleration.acceleration.add(utility_vector);
+    };
   } //update
 
   public function setup(fric:Float) {

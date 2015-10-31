@@ -28,5 +28,7 @@ class HoverComponent extends Component {
 
   public function setup(entity: Entity){
     hover_around_entity = entity;
+    sprite.pos.x = hover_around_entity.pos.x;
+    sprite.pos.y = hover_around_entity.pos.y;
   }
 }

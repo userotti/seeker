@@ -36,7 +36,7 @@ class LevelBuilder {
     _tower.resetTexture('metal_guy_red-01.png',8);
     _tower.get(CooldownComponent.TAG).setup(4.8);
     _tower.get(FrictionComponent.TAG).setup(100);
-    _tower.get(BreakComponent.TAG).setup(50);
+    _tower.get(BreakComponent.TAG).setup(200);
     _tower.get(BoostComponent.TAG).setup(310, 140000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
     _tower.get(ForceFieldComponent.TAG).setup(150, 50, 200); //bigradius, small_radius constant_force
@@ -52,7 +52,7 @@ class LevelBuilder {
     _tower.resetTexture('metal_guy_green-01.png',8);
     _tower.get(CooldownComponent.TAG).setup(4.8);
     _tower.get(FrictionComponent.TAG).setup(100);
-    _tower.get(BreakComponent.TAG).setup(200);
+    _tower.get(BreakComponent.TAG).setup(500);
     _tower.get(BoostComponent.TAG).setup(310, 140000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
     _tower.get(ForceFieldComponent.TAG).setup(150, 50, 200); //bigradius, small_radius constant_force

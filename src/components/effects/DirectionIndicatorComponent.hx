@@ -27,9 +27,8 @@ class DirectionIndicatorComponent extends Component {
   } //init
 
   override function update(dt:Float) {
-
-    indicator.origin.x = 40; // (distance from the center, indicator w/2)
     indicator.rotation_z = (Math.atan2(direction_vector.y, direction_vector.x) / Math.PI) * 180;
+
   } //update
 
 

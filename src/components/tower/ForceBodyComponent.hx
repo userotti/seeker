@@ -37,6 +37,13 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
     owner = cast(this.entity, Sprite);
     bounding_box.x = Std.int(owner.pos.x-(hit_radius));
     bounding_box.y = Std.int(owner.pos.y-(hit_radius));
+
+    //
+    if (has_indicator == true){
+      Luxe.events.fire('kill_effect', {effect: this.indicator.indicator});
+      this.indicator = null;
+      has_indicator = false;
+    }
   } //init
 
   override function update(dt:Float) {
@@ -49,7 +56,7 @@ class ForceBodyComponent extends Component implements QuadtreeElement {
       //manage my own indicator
       if (has_indicator == false){
 
-        Luxe.events.fire('attach_force_indicator', {force_body: this});
+        Luxe.events.fire('attach_force_indicator', {force_body: this, direction_vector:new Vector(total_force.x, total_force.y)});
         has_indicator = true;
       }
 

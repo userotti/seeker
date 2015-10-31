@@ -150,7 +150,7 @@ class GameState extends luxe.States.State {
 
     event_ids.push(Luxe.events.listen('attach_force_indicator', function(e){
         var effect = effect_scene_manager.getIndicator();
-        EffectBuilder.makeIndicator(effect, e.force_body.owner, 'force_indicator-01.png', 12);
+        EffectBuilder.makeIndicator(effect, e.force_body.owner, e.direction_vector, 40,'force_indicator-01.png', 12);
         e.force_body.indicator = effect.get(DirectionIndicatorComponent.TAG);
     }));
 
@@ -160,6 +160,10 @@ class GameState extends luxe.States.State {
 
     event_ids.push(Luxe.events.listen('tower_hit', function(e){
         EffectBuilder.makeHullHit(e.target, e.attacker, effect_scene_manager);
+    }));
+
+    event_ids.push(Luxe.events.listen('tower_killed', function(e){
+        EffectBuilder.makeTowerDestory(e.dead_tower, effect_scene_manager);
     }));
 
   }
@@ -206,6 +210,8 @@ class GameState extends luxe.States.State {
 
     case 'level3':
 
+      player = collison_scene_manager.getTower();
+      LevelBuilder.makeMinorRedHexGrunt(player, new Vector(0,0));
 
     }
 

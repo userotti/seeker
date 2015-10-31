@@ -44,7 +44,8 @@ class DefenceComponent extends Component implements QuadtreeElement{
 
     hull = hull - _damage;
     if (hull <= 0){
-      //collision_scene_manager.kill(this.tower);
+      Luxe.events.fire('tower_killed', {dead_tower:tower});
+      Luxe.events.fire('kill_collidable', {collidable:tower});
     }
 
     Luxe.events.fire('tower_hit', {target:tower, attacker: attacker});

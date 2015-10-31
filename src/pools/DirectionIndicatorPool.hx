@@ -30,9 +30,7 @@ class  DirectionIndicatorPool extends Pool<TextureSprite>{
     direction_indicator.visible = false;
     direction_indicator.add(new HoverComponent({ name: HoverComponent.TAG }));
     direction_indicator.add(new DirectionIndicatorComponent({ name: DirectionIndicatorComponent.TAG }));
-
-
-
+    
     return direction_indicator;
   }
 
