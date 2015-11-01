@@ -36,7 +36,7 @@ class LevelBuilder {
     _tower.resetTexture('metal_guy_red-01.png',8);
     _tower.get(CooldownComponent.TAG).setup(4.8);
     _tower.get(FrictionComponent.TAG).setup(100);
-    _tower.get(BreakComponent.TAG).setup(200);
+    _tower.get(BreakComponent.TAG).setup(50);
     _tower.get(BoostComponent.TAG).setup(310, 140000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
     _tower.get(ForceFieldComponent.TAG).setup(150, 50, 200); //bigradius, small_radius constant_force
@@ -59,6 +59,40 @@ class LevelBuilder {
     _tower.get(DefenceComponent.TAG).setup(2, 100); //bigradius, max_hull
     _tower.get(OffenceComponent.TAG).setup(100, 50, 1, 100); //bigradius, small_radius, damage, reload
     _tower.get(MetaDataComponent.TAG).setup('tower', 'green');
+
+  }
+
+  //PUSAHBLES ===========================================
+  public static function makeTowerDeathShrapnal(_dead_tower:Sprite, csm:CollisionSceneManager){
+
+    var pushable = csm.getPushable();
+    pushable.pos = new Vector(_dead_tower.pos.x, _dead_tower.pos.y);
+    pushable.rotation_z = Math.random()*360;
+    pushable.resetTexture('green_grunt_shrapnal-01.png', 9);
+    pushable.get(FrictionComponent.TAG).setup(100);
+    pushable.get(ForceBodyComponent.TAG).setup(1);
+    pushable.get(MetaDataComponent.TAG).setup('shrapnal', 'green');
+    pushable.get(MovementComponent.TAG).setup(new Vector(Math.random()*300 - 150, Math.random()*300 - 150));
+
+    var pushable = csm.getPushable();
+    pushable.pos = new Vector(_dead_tower.pos.x, _dead_tower.pos.y);
+    pushable.rotation_z = Math.random()*360;
+    pushable.resetTexture('green_grunt_shrapnal-02.png', 9);
+    pushable.get(FrictionComponent.TAG).setup(100);
+    pushable.get(ForceBodyComponent.TAG).setup(1);
+    pushable.get(MetaDataComponent.TAG).setup('shrapnal', 'green');
+    pushable.get(MovementComponent.TAG).setup(new Vector(Math.random()*300 - 150, Math.random()*300 - 150));
+
+    var pushable = csm.getPushable();
+    pushable.pos = new Vector(_dead_tower.pos.x, _dead_tower.pos.y);
+    pushable.rotation_z = Math.random()*360;
+    pushable.resetTexture('green_grunt_shrapnal-03.png', 9);
+    pushable.get(FrictionComponent.TAG).setup(100);
+    pushable.get(ForceBodyComponent.TAG).setup(1);
+    pushable.get(MetaDataComponent.TAG).setup('shrapnal', 'green');
+    pushable.get(MovementComponent.TAG).setup(new Vector(Math.random()*300 - 150, Math.random()*300 - 150));
+
+
 
   }
 

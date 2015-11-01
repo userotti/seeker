@@ -31,8 +31,9 @@ class MovementComponent extends Component {
 
   } //update
 
-  public function setup(top_s:Float) {
-    trace('setup');
+  public function setup(_vel:Vector) {
+    velocity.x = _vel.x;
+    velocity.y = _vel.y;
 
   } //init
 

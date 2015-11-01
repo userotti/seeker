@@ -148,6 +148,10 @@ class GameState extends luxe.States.State {
         effect_scene_manager.kill(e.effect);
     }));
 
+    event_ids.push(Luxe.events.listen('create_tower_shrapnal', function(e){
+        LevelBuilder.makeTowerDeathShrapnal(e.collidable, collison_scene_manager);
+    }));
+
     event_ids.push(Luxe.events.listen('attach_force_indicator', function(e){
         var effect = effect_scene_manager.getIndicator();
         EffectBuilder.makeIndicator(effect, e.force_body.owner, e.direction_vector, 40,'force_indicator-01.png', 12);
@@ -157,6 +161,8 @@ class GameState extends luxe.States.State {
     event_ids.push(Luxe.events.listen('tower_shoot', function(e){
         EffectBuilder.makeWeaponBlast(e.target, e.attacker, effect_scene_manager);
     }));
+
+
 
     event_ids.push(Luxe.events.listen('tower_hit', function(e){
         EffectBuilder.makeHullHit(e.target, e.attacker, effect_scene_manager);
@@ -203,7 +209,7 @@ class GameState extends luxe.States.State {
       LevelBuilder.makeMinorGreenRectGrunt(collison_scene_manager.getTower(), new Vector(0 + 350, 0 + 0));
       LevelBuilder.makeMinorGreenRectGrunt(collison_scene_manager.getTower(), new Vector(0 - 350, 0 + 350));
       background_factory.createBackdrop(new Color().rgb(0x071c16));
-      LevelBuilder.makeOrePatch(50, 150,150, new Vector(-500,0), collison_scene_manager);
+      LevelBuilder.makeOrePatch(50, 150,150, new Vector(-650,0), collison_scene_manager);
       LevelBuilder.makeOrePatch(50, 200,200, new Vector(-350,-300), collison_scene_manager);
       LevelBuilder.makeOrePatch(50, 200,200, new Vector(-300,450), collison_scene_manager);
       LevelBuilder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(0, 0));

@@ -59,6 +59,9 @@ class Main extends luxe.Game {
     config.preload.textures.push({ id:'assets/images/rasters/blue_hit_bang_top-01.png' }); //25 x 25
     config.preload.textures.push({ id:'assets/images/rasters/spark-01.png' }); //25 x 25
 
+    config.preload.textures.push({ id:'assets/images/rasters/green_grunt_shrapnal-01.png' }); //25 x 25
+    config.preload.textures.push({ id:'assets/images/rasters/green_grunt_shrapnal-02.png' }); //25 x 25
+    config.preload.textures.push({ id:'assets/images/rasters/green_grunt_shrapnal-03.png' }); //25 x 25
 
 
     config.preload.textures.push({ id:'assets/images/rasters/bushes-01.png' }); //25 x 25
