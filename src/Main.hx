@@ -49,7 +49,7 @@ class Main extends luxe.Game {
     config.preload.textures.push({ id:'assets/images/rasters/mainmenu/title800x205.png' });
 
     config.preload.textures.push({ id:'assets/images/rasters/mainmenu_title-01.png' });
-    config.preload.textures.push({ id:'assets/images/rasters/game_background_blue4_title-01.png' });
+    config.preload.textures.push({ id:'assets/images/rasters/mainmenu_background_1280_720.png' });
 
     config.preload.textures.push({ id:'assets/images/rasters/blue_weapon_flame-01.png' }); //25 x 25
     config.preload.textures.push({ id:'assets/images/rasters/blue_weapon_flame_short-01.png' }); //25 x 25

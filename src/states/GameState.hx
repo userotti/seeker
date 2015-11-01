@@ -115,13 +115,13 @@ class GameState extends luxe.States.State {
 
     collison_scene_manager.updateCollisionTree(dt);
     if (player != null){
-      Luxe.camera.center.x = player.pos.x;
+      Luxe.camera.center.x = player.pos.x + (Luxe.screen.w / 100) * 10;
       Luxe.camera.center.y = player.pos.y;
     }else{
       Luxe.camera.center.x = 0;
       Luxe.camera.center.y = 0;
     }
-    Luxe.camera.zoom = 1;
+    Luxe.camera.zoom = 0.85;
 
   }
 
@@ -212,7 +212,7 @@ class GameState extends luxe.States.State {
       LevelBuilder.makeOrePatch(50, 150,150, new Vector(-650,0), collison_scene_manager);
       LevelBuilder.makeOrePatch(50, 200,200, new Vector(-350,-300), collison_scene_manager);
       LevelBuilder.makeOrePatch(50, 200,200, new Vector(-300,450), collison_scene_manager);
-      LevelBuilder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(0, 0));
+      LevelBuilder.makeMetalNest(collison_scene_manager.getStaticTower(), new Vector(-450, -450));
 
     case 'level3':
 

@@ -25,7 +25,7 @@ class LevelBuilder {
   public static function makeMetalNest (_static_tower:TextureSprite, _pos:Vector){
     _static_tower.pos = _pos;
     _static_tower.resetTexture('metal_nest-01.png', 10);
-    _static_tower.get(ForceFieldComponent.TAG).setup(200, 50, 200);
+    _static_tower.get(ForceFieldComponent.TAG).setup(200, 50, -150);
     _static_tower.get(MetaDataComponent.TAG).setup('static_tower', 'blue');
   }
 
@@ -35,13 +35,13 @@ class LevelBuilder {
     _tower.rotation_z = Math.random()*360;
     _tower.resetTexture('metal_guy_red-01.png',8);
     _tower.get(CooldownComponent.TAG).setup(4.8);
-    _tower.get(FrictionComponent.TAG).setup(100);
-    _tower.get(BreakComponent.TAG).setup(50);
-    _tower.get(BoostComponent.TAG).setup(310, 140000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
+    _tower.get(FrictionComponent.TAG).setup(10);
+    _tower.get(BreakComponent.TAG).setup(350);
+    _tower.get(BoostComponent.TAG).setup(350, 80000, 350); //boostpower, max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
     _tower.get(ForceFieldComponent.TAG).setup(150, 50, 200); //bigradius, small_radius constant_force
     _tower.get(DefenceComponent.TAG).setup(2, 100); //bigradius, max_hull
-    _tower.get(OffenceComponent.TAG).setup(500, 50, 5, 400); //bigradius, small_radius, damage, reload
+    _tower.get(OffenceComponent.TAG).setup(250, 50, 15, 350); //bigradius, small_radius, damage, reload
     _tower.get(MetaDataComponent.TAG).setup('tower', 'red');
 
   }
@@ -53,7 +53,7 @@ class LevelBuilder {
     _tower.get(CooldownComponent.TAG).setup(4.8);
     _tower.get(FrictionComponent.TAG).setup(100);
     _tower.get(BreakComponent.TAG).setup(500);
-    _tower.get(BoostComponent.TAG).setup(310, 140000, 1500); //boostpower, top_speed, max_fuel, fuel_recharge
+    _tower.get(BoostComponent.TAG).setup(310, 1400, 1500); //boostpower,  max_fuel, fuel_recharge
     _tower.get(ForceBodyComponent.TAG).setup(1); //hit_radius
     _tower.get(ForceFieldComponent.TAG).setup(150, 50, 200); //bigradius, small_radius constant_force
     _tower.get(DefenceComponent.TAG).setup(2, 100); //bigradius, max_hull

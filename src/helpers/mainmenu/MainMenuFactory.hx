@@ -39,8 +39,8 @@ class MainMenuFactory {
     title_sprite = new Sprite({
       name:'title',
       texture : Luxe.resources.texture('assets/images/rasters/mainmenu_title-01.png'),
-      pos : new Vector(0,0),
-      centered : false,
+      pos : new Vector(Luxe.screen.w/2,100),
+      centered : true,
       visible: true,
       scale: new Vector(1,1),
       scene: scene,
@@ -97,7 +97,7 @@ class MainMenuFactory {
   public function createBackdrop (){
     title_sprite = new Sprite({
       name:'backdrop',
-      texture : Luxe.resources.texture('assets/images/rasters/game_background_blue4_title-01.png'),
+      texture : Luxe.resources.texture('assets/images/rasters/mainmenu_background_1280_720.png'),
       pos : new Vector(0,0),
       centered : false,
       visible: true,

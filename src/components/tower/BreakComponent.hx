@@ -35,7 +35,7 @@ class BreakComponent extends Component {
     if (breaking == true){
       utility_float = movement.velocity.length;
       //performance check
-      if (utility_float > 0.001){
+      if (utility_float > 0.000001){
         final_break = break_friction_power - (break_friction_power + 0.05*utility_float)/(1 + 0.05*utility_float);
         utility_vector.x = movement.velocity.x * -1;
         utility_vector.y = movement.velocity.y * -1;
